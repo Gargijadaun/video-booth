@@ -8,6 +8,8 @@ const { processSelfie, ValidationError } = require('../services/faceProcessor');
 const { SELFIES_DIR, safeUnlink } = require('../services/storage');
 const { broadcast, publicSession } = require('../services/websocket');
 
+const MAX_ANGLES = 3;
+
 const upload = multer({
   storage: multer.memoryStorage(),
   limits: { fileSize: config.maxUploadMb * 1024 * 1024 },
@@ -23,8 +25,11 @@ const upload = multer({
 module.exports = function createUploadRouter(sessionStore) {
   const router = express.Router();
 
+  // Accepts 1-3 angle photos (field name "selfies", repeated) so the face-swap
+  // step can be given multiple reference angles instead of just one frontal
+  // shot. Still works fine with a single photo for callers that only send one.
   router.post('/session/:id/selfie', (req, res) => {
-    upload.single('selfie')(req, res, async (err) => {
+    upload.array('selfies', MAX_ANGLES)(req, res, async (err) => {
       if (err) {
         const message = err instanceof ValidationError ? err.message : 'Upload failed. Please try again.';
         return res.status(400).json({ error: message });
@@ -34,24 +39,26 @@ module.exports = function createUploadRouter(sessionStore) {
       if (!session) {
         return res.status(404).json({ error: 'Session not found or expired.' });
       }
-      if (!req.file) {
+      if (!req.files || req.files.length === 0) {
         return res.status(400).json({ error: 'No photo received. Please take another photo.' });
       }
 
       try {
-        const { buffer } = await processSelfie(req.file.buffer);
+        const processed = await Promise.all(req.files.map((f) => processSelfie(f.buffer)));
 
-        // Replace any previous selfie for this session.
-        safeUnlink(session.selfiePath);
+        // Replace any previous selfies for this session.
+        for (const p of session.selfiePaths || []) safeUnlink(p);
 
-        const filename = `${nanoid(16)}.jpg`;
-        const filePath = path.join(SELFIES_DIR, filename);
-        fs.writeFileSync(filePath, buffer);
+        const filePaths = processed.map(({ buffer }) => {
+          const filePath = path.join(SELFIES_DIR, `${nanoid(16)}.jpg`);
+          fs.writeFileSync(filePath, buffer);
+          return filePath;
+        });
 
         const selfieExpiresAt = Date.now() + config.selfieTtlMinutes * 60 * 1000;
         const updated = sessionStore.update(req.params.id, {
           status: 'SELFIE_UPLOADED',
-          selfiePath: filePath,
+          selfiePaths: filePaths,
           selfieExpiresAt
         });
 

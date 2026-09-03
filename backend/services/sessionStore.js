@@ -36,7 +36,7 @@ class SessionStore {
       sessionId,
       status: 'WAITING_FOR_PHONE',
       templateId: null,
-      selfiePath: null,
+      selfiePaths: [],
       selfieExpiresAt: null,
       videoId: null,
       videoUrl: null,
@@ -75,7 +75,7 @@ class SessionStore {
     return this.update(sessionId, {
       status: 'PHONE_CONNECTED',
       templateId: null,
-      selfiePath: null,
+      selfiePaths: [],
       selfieExpiresAt: null,
       videoId: null,
       videoUrl: null,
@@ -111,9 +111,9 @@ class SessionStore {
       if (session.expiresAt < now) {
         expiredSessions.push(session);
         this.sessions.delete(session.sessionId);
-      } else if (session.selfiePath && session.selfieExpiresAt && session.selfieExpiresAt < now) {
+      } else if (session.selfiePaths?.length && session.selfieExpiresAt && session.selfieExpiresAt < now) {
         expiredSessions.push({ selfieOnly: true, ...session });
-        session.selfiePath = null;
+        session.selfiePaths = [];
         session.selfieExpiresAt = null;
       }
     }

@@ -27,7 +27,7 @@ module.exports = function createGenerationRouter(sessionStore) {
     if (!session.templateId) {
       return res.status(400).json({ error: 'No template selected yet.' });
     }
-    if (!session.selfiePath || !fs.existsSync(session.selfiePath)) {
+    if (!hasUsableSelfies(session)) {
       return res.status(400).json({ error: 'No photo uploaded yet. Please take a photo first.' });
     }
 
@@ -66,10 +66,10 @@ module.exports = function createGenerationRouter(sessionStore) {
     res.json({ session: publicSession(session) });
   });
 
-  // Diagnostic/preview only: runs JUST the face-swap step (cheap, ~$0.02-0.19
-  // on OpenAI) and returns the resulting image directly - lets the identity-
-  // preservation quality be checked and iterated on without paying for a
-  // full video generation (which costs far more) on every attempt.
+  // Diagnostic/preview only: runs JUST the face-swap step (cheap) and returns
+  // the resulting image directly - lets identity-preservation quality be
+  // checked and iterated on without paying for a full video generation
+  // (which costs far more) on every attempt.
   router.post('/session/:id/preview-faceswap', async (req, res) => {
     const session = sessionStore.get(req.params.id);
     if (!session) {
@@ -78,11 +78,11 @@ module.exports = function createGenerationRouter(sessionStore) {
     if (!session.templateId) {
       return res.status(400).json({ error: 'No template selected yet.' });
     }
-    if (!session.selfiePath || !fs.existsSync(session.selfiePath)) {
+    if (!hasUsableSelfies(session)) {
       return res.status(400).json({ error: 'No photo uploaded yet. Please take a photo first.' });
     }
-    if (!config.fal.apiKey) {
-      return res.status(400).json({ error: 'FAL_API_KEY is not set - face swap is not configured.' });
+    if (!config.gemini.apiKey) {
+      return res.status(400).json({ error: 'GEMINI_API_KEY is not set - face swap is not configured.' });
     }
 
     const template = templates.find((t) => t.id === session.templateId && t.active);
@@ -91,15 +91,14 @@ module.exports = function createGenerationRouter(sessionStore) {
     }
 
     try {
-      const selfieBuffer = fs.readFileSync(session.selfiePath);
+      const selfieBuffers = session.selfiePaths.map((p) => fs.readFileSync(p));
       const templateImagePath = path.join(__dirname, '..', 'templates', 'assets', path.basename(template.thumbnail));
       const templateImageBuffer = fs.readFileSync(templateImagePath);
       const swapped = await swapFaceOntoTemplate({
-        selfieBuffer,
+        selfieBuffers,
         selfieMimeType: 'image/jpeg',
         templateImageBuffer,
-        templateImageMimeType: 'image/jpeg',
-        gender: template.gender
+        templateImageMimeType: 'image/jpeg'
       });
       const dataUrl = `data:${swapped.imageMimeType};base64,${swapped.imageBuffer.toString('base64')}`;
       res.json({ previewImage: dataUrl });
@@ -111,12 +110,16 @@ module.exports = function createGenerationRouter(sessionStore) {
   return router;
 };
 
+function hasUsableSelfies(session) {
+  return Boolean(session.selfiePaths?.length) && session.selfiePaths.every((p) => fs.existsSync(p));
+}
+
 async function runGenerationJob(sessionStore, sessionId, jobId, template) {
   const provider = getProvider();
   const session = sessionStore.get(sessionId);
   if (!session) return;
 
-  const selfieBuffer = fs.readFileSync(session.selfiePath);
+  const selfieBuffers = session.selfiePaths.map((p) => fs.readFileSync(p));
 
   // Fire progress feedback immediately - the face swap step below can take a
   // noticeable few seconds, and guests should never stare at a spinner with
@@ -127,23 +130,22 @@ async function runGenerationJob(sessionStore, sessionId, jobId, template) {
   // generation, so the model gets an image that already shows them in the
   // correct costume/pose - instead of guessing the costume from text while
   // anchored on their plain selfie (which produced inconsistent results and a
-  // jarring "starts as your selfie" first frame). Falls back to the raw
+  // jarring "starts as your selfie" first frame). Falls back to the first
   // selfie if the swap step fails, so a guest never sees a hard error here.
-  let imageBuffer = selfieBuffer;
+  let imageBuffer = selfieBuffers[0];
   let imageMimeType = 'image/jpeg';
 
-  // The face-swap step (fal.ai Easel) is independent of which provider
-  // actually generates the video - it just needs FAL_API_KEY configured.
-  if (config.fal.apiKey && template.thumbnail) {
+  // The face-swap step (Gemini) is independent of which provider actually
+  // generates the video - it just needs GEMINI_API_KEY configured.
+  if (config.gemini.apiKey && template.thumbnail) {
     try {
       const templateImagePath = path.join(__dirname, '..', 'templates', 'assets', path.basename(template.thumbnail));
       const templateImageBuffer = fs.readFileSync(templateImagePath);
       const swapped = await swapFaceOntoTemplate({
-        selfieBuffer,
+        selfieBuffers,
         selfieMimeType: 'image/jpeg',
         templateImageBuffer,
-        templateImageMimeType: 'image/jpeg',
-        gender: template.gender
+        templateImageMimeType: 'image/jpeg'
       });
       imageBuffer = swapped.imageBuffer;
       imageMimeType = swapped.imageMimeType;
@@ -245,15 +247,15 @@ async function runGenerationJob(sessionStore, sessionId, jobId, template) {
   const videoUrl = `${config.publicBaseUrl}/media/videos/${videoId}.mp4`;
   const thumbnailUrl = `${config.publicBaseUrl}/media/thumbnails/${videoId}.jpg`;
 
-  // Delivered - remove the temporary selfie now (privacy requirement).
-  safeUnlink(session.selfiePath);
+  // Delivered - remove the temporary selfies now (privacy requirement).
+  for (const p of session.selfiePaths || []) safeUnlink(p);
 
   const updated = sessionStore.update(sessionId, {
     status: 'VIDEO_READY',
     videoId,
     videoUrl,
     thumbnailUrl,
-    selfiePath: null,
+    selfiePaths: [],
     selfieExpiresAt: null
   });
 

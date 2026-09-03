@@ -13,7 +13,7 @@ function startCleanupSweeper(sessionStore) {
     const { expiredSessions, expiredVideos } = sessionStore.sweepExpired();
 
     for (const session of expiredSessions) {
-      safeUnlink(session.selfiePath);
+      for (const p of session.selfiePaths || []) safeUnlink(p);
     }
 
     for (const video of expiredVideos) {

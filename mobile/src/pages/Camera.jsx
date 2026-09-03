@@ -1,7 +1,17 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { apiUrl } from '../config.js';
 
+const ANGLE_STEPS = [
+  { instruction: 'Look straight at the camera', label: 'Front' },
+  { instruction: 'Now turn your head slightly to your right', label: 'Right angle' },
+  { instruction: 'Now turn your head slightly to your left', label: 'Left angle' }
+];
+
 /**
+ * Captures 3 shots (front, right, left) instead of one - giving the face-swap
+ * step multiple angles noticeably improves identity accuracy over a single
+ * frontal photo.
+ *
  * Uses the browser's native FaceDetector API (Chrome/Android WebView) for
  * live framing feedback when it's available, and falls back to a plain
  * framing guide + brightness check on browsers that don't support it
@@ -18,8 +28,11 @@ export default function Camera({ sessionId, onBack, onUploaded }) {
   const [phase, setPhase] = useState('loading'); // loading | live | captured | uploading
   const [faceOk, setFaceOk] = useState(false);
   const [hint, setHint] = useState('Position your face inside the frame');
-  const [capturedDataUrl, setCapturedDataUrl] = useState(null);
+  const [shots, setShots] = useState([]); // array of { dataUrl }
   const [error, setError] = useState(null);
+
+  const shotIndex = shots.length;
+  const currentStep = ANGLE_STEPS[Math.min(shotIndex, ANGLE_STEPS.length - 1)];
 
   useEffect(() => {
     let cancelled = false;
@@ -92,7 +105,6 @@ export default function Camera({ sessionId, onBack, onUploaded }) {
         const faces = await detectorRef.current.detect(videoRef.current);
         if (faces.length === 1 && brightnessOk) {
           setFaceOk(true);
-          setHint('Great! Face detected - tap capture');
         } else {
           setFaceOk(false);
           if (brightnessOk) setHint(faces.length === 0 ? 'Position your face inside the frame' : 'Only one person at a time, please');
@@ -102,7 +114,6 @@ export default function Camera({ sessionId, onBack, onUploaded }) {
       }
     } else if (brightnessOk) {
       setFaceOk(true);
-      setHint('Position your face inside the frame, then tap capture');
     }
 
     rafRef.current = requestAnimationFrame(() => setTimeout(detectLoop, 250));
@@ -140,12 +151,18 @@ export default function Camera({ sessionId, onBack, onUploaded }) {
     ctx.translate(canvas.width, 0);
     ctx.scale(-1, 1);
     ctx.drawImage(video, sx, sy, sw, sh, 0, 0, targetWidth, targetHeight);
-    setCapturedDataUrl(canvas.toDataURL('image/jpeg', 0.92));
-    setPhase('captured');
+    const dataUrl = canvas.toDataURL('image/jpeg', 0.92);
+
+    const nextShots = [...shots, { dataUrl }];
+    setShots(nextShots);
+
+    if (nextShots.length >= ANGLE_STEPS.length) {
+      setPhase('captured');
+    }
   }
 
-  function retake() {
-    setCapturedDataUrl(null);
+  function retakeAll() {
+    setShots([]);
     setPhase('live');
   }
 
@@ -153,13 +170,15 @@ export default function Camera({ sessionId, onBack, onUploaded }) {
     setPhase('uploading');
     setError(null);
     try {
-      const blob = await (await fetch(capturedDataUrl)).blob();
       const form = new FormData();
-      form.append('selfie', blob, 'selfie.jpg');
+      for (let i = 0; i < shots.length; i++) {
+        const blob = await (await fetch(shots[i].dataUrl)).blob();
+        form.append('selfies', blob, `selfie_${i}.jpg`);
+      }
       const res = await fetch(apiUrl(`/api/session/${sessionId}/selfie`), { method: 'POST', body: form });
       const data = await res.json();
       if (!res.ok) {
-        setError(data.error || 'Please take another photo with your face clearly visible.');
+        setError(data.error || 'Please retake your photos with your face clearly visible.');
         setPhase('captured');
         return;
       }
@@ -179,25 +198,37 @@ export default function Camera({ sessionId, onBack, onUploaded }) {
       </div>
 
       <div className="grow-center" style={{ flex: 'none', marginBottom: 6 }}>
-        <p className="subtitle">Position your face inside the frame.</p>
+        <p className="subtitle">
+          {phase === 'live' ? `Photo ${shotIndex + 1} of ${ANGLE_STEPS.length} - ${currentStep.instruction}` : 'Review your photos'}
+        </p>
       </div>
 
       {error && <div className="error-banner">{error}</div>}
 
-      <div className="camera-wrap">
-        {phase !== 'captured' && phase !== 'uploading' && (
+      {phase !== 'captured' && phase !== 'uploading' && (
+        <div className="camera-wrap">
           <video ref={videoRef} playsInline muted autoPlay style={{ transform: 'scaleX(-1)' }} />
-        )}
-        {(phase === 'captured' || phase === 'uploading') && capturedDataUrl && (
-          <img className="captured" src={capturedDataUrl} alt="Captured selfie" />
-        )}
-        {phase !== 'captured' && phase !== 'uploading' && (
           <div className="face-guide">
             <div className={`face-oval ${faceOk ? 'ok' : ''}`} />
-            <div className="face-hint">{hint}</div>
+            <div className="face-hint">{faceOk ? `${currentStep.label}: tap capture` : hint}</div>
           </div>
-        )}
-      </div>
+        </div>
+      )}
+
+      {(phase === 'captured' || phase === 'uploading') && (
+        <div style={{ display: 'flex', gap: 10, justifyContent: 'center', flexWrap: 'wrap' }}>
+          {shots.map((s, i) => (
+            <div key={i} style={{ textAlign: 'center' }}>
+              <img
+                src={s.dataUrl}
+                alt={ANGLE_STEPS[i]?.label}
+                style={{ width: 100, height: 133, objectFit: 'cover', borderRadius: 14, display: 'block' }}
+              />
+              <span style={{ fontSize: 11, color: 'var(--text-dim)' }}>{ANGLE_STEPS[i]?.label}</span>
+            </div>
+          ))}
+        </div>
+      )}
 
       <canvas ref={canvasRef} style={{ display: 'none' }} />
 
@@ -205,14 +236,14 @@ export default function Camera({ sessionId, onBack, onUploaded }) {
 
       {phase === 'live' && (
         <button className="btn btn-primary" disabled={!faceOk} onClick={capture}>
-          CAPTURE PHOTO
+          CAPTURE PHOTO {shotIndex + 1} OF {ANGLE_STEPS.length}
         </button>
       )}
 
       {phase === 'captured' && (
         <div className="btn-row">
-          <button className="btn btn-secondary" onClick={retake}>RETAKE</button>
-          <button className="btn btn-primary" onClick={confirm}>USE THIS PHOTO</button>
+          <button className="btn btn-secondary" onClick={retakeAll}>RETAKE ALL</button>
+          <button className="btn btn-primary" onClick={confirm}>USE THESE PHOTOS</button>
         </div>
       )}
 
