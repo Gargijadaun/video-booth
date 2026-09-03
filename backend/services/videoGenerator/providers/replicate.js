@@ -2,8 +2,15 @@ const fetch = require('node-fetch');
 const config = require('../../../config');
 
 /**
- * Replicate image-to-video provider.
- * Docs: https://replicate.com/docs/reference/http
+ * Replicate image-to-video provider, targeting minimax/video-01 (Hailuo) by
+ * default - it's in Replicate's genuinely free "Try for Free" collection
+ * (limited free runs, no credit card required to start). Docs:
+ * https://replicate.com/minimax/video-01
+ *
+ * minimax/video-01 has its own input shape (first_frame_image, prompt,
+ * prompt_optimizer) rather than the generic image/negative_prompt/num_frames
+ * fields other i2v models use - no negative prompt or explicit frame-count
+ * control, and duration is fixed at ~6s by the model itself, not configurable.
  */
 
 const BASE_URL = 'https://api.replicate.com/v1';
@@ -14,7 +21,7 @@ function assertConfigured() {
   }
 }
 
-async function startJob({ imageBuffer, imageMimeType, prompt, negativePrompt, durationSeconds, aspectRatio }) {
+async function startJob({ imageBuffer, imageMimeType, prompt }) {
   assertConfigured();
 
   const dataUri = `data:${imageMimeType};base64,${imageBuffer.toString('base64')}`;
@@ -28,11 +35,9 @@ async function startJob({ imageBuffer, imageMimeType, prompt, negativePrompt, du
     },
     body: JSON.stringify({
       input: {
-        image: dataUri,
+        first_frame_image: dataUri,
         prompt,
-        negative_prompt: negativePrompt,
-        num_frames: Math.min(durationSeconds * 16, 161),
-        aspect_ratio: aspectRatio
+        prompt_optimizer: true
       }
     })
   });
