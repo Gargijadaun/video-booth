@@ -31,12 +31,19 @@ async function startJob({ imageBuffer, durationSeconds }) {
   const fps = 24;
   const totalFrames = duration * fps;
 
+  // Render at a small size - zoompan decodes/scales every frame individually
+  // and is memory-hungry at full 1080x1920 (enough to OOM a 512MB free-tier
+  // dyno). The upscale step (upscale.js) does a single-pass scale+crop to the
+  // real 1080x1920 delivery size afterward, which is far cheaper.
+  const workingWidth = 360;
+  const workingHeight = 640;
+
   ffmpeg(tmpImage)
     .inputOptions(['-loop 1'])
     .videoFilters([
-      `scale=1080:1920:force_original_aspect_ratio=increase`,
-      `crop=1080:1920`,
-      `zoompan=z='min(zoom+0.0015,1.3)':d=${totalFrames}:s=1080x1920:fps=${fps}`,
+      `scale=${workingWidth}:${workingHeight}:force_original_aspect_ratio=increase`,
+      `crop=${workingWidth}:${workingHeight}`,
+      `zoompan=z='min(zoom+0.0015,1.3)':d=${totalFrames}:s=${workingWidth}x${workingHeight}:fps=${fps}`,
       `format=yuv420p`
     ])
     .outputOptions([`-t ${duration}`, '-movflags +faststart'])
