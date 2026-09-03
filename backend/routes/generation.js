@@ -7,6 +7,7 @@ const config = require('../config');
 const templates = require('../templates/templates.json');
 const { getProvider } = require('../services/videoGenerator');
 const { normalizeToDeliveryFormat } = require('../services/videoGenerator/upscale');
+const { swapFaceOntoTemplate } = require('../services/videoGenerator/faceSwap');
 const { VIDEOS_DIR, THUMBS_DIR, safeUnlink } = require('../services/storage');
 const { broadcast, publicSession } = require('../services/websocket');
 
@@ -73,7 +74,34 @@ async function runGenerationJob(sessionStore, sessionId, jobId, template) {
   const session = sessionStore.get(sessionId);
   if (!session) return;
 
-  const imageBuffer = fs.readFileSync(session.selfiePath);
+  const selfieBuffer = fs.readFileSync(session.selfiePath);
+
+  // Swap the guest's face onto the template's own reference photo BEFORE video
+  // generation, so the model gets an image that already shows them in the
+  // correct costume/pose - instead of guessing the costume from text while
+  // anchored on their plain selfie (which produced inconsistent results and a
+  // jarring "starts as your selfie" first frame). Falls back to the raw
+  // selfie if the swap step fails, so a guest never sees a hard error here.
+  let imageBuffer = selfieBuffer;
+  let imageMimeType = 'image/jpeg';
+
+  if (config.videoProvider === 'fal' && template.thumbnail) {
+    try {
+      const templateImagePath = path.join(__dirname, '..', 'templates', 'assets', path.basename(template.thumbnail));
+      const templateImageBuffer = fs.readFileSync(templateImagePath);
+      const swapped = await swapFaceOntoTemplate({
+        selfieBuffer,
+        selfieMimeType: 'image/jpeg',
+        templateImageBuffer,
+        templateImageMimeType: 'image/jpeg',
+        gender: template.gender
+      });
+      imageBuffer = swapped.imageBuffer;
+      imageMimeType = swapped.imageMimeType;
+    } catch (err) {
+      console.error(`[generation] template face swap failed, falling back to raw selfie:`, err.message);
+    }
+  }
 
   // Pick a random action each generation so repeat guests on the same template
   // don't all get the identical "walks toward camera" clip - only the action
@@ -88,7 +116,7 @@ async function runGenerationJob(sessionStore, sessionId, jobId, template) {
 
   const { providerJobId } = await provider.startJob({
     imageBuffer,
-    imageMimeType: 'image/jpeg',
+    imageMimeType,
     prompt: filledPrompt,
     negativePrompt: template.negativePrompt,
     durationSeconds: template.duration,
