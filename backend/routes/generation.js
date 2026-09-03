@@ -47,8 +47,11 @@ module.exports = function createGenerationRouter(sessionStore) {
       console.error(`[generation] job ${jobId} crashed:`, err);
       const current = sessionStore.get(sessionId);
       if (current && current.jobId === jobId) {
-        sessionStore.update(sessionId, { status: 'FAILED', error: 'Something went wrong while creating your video.' });
-        broadcast(sessionId, 'GENERATION_FAILED', { error: 'Something went wrong while creating your video.' });
+        // TEMP DIAGNOSTIC: surfacing err.message to the client to debug the live
+        // deployment. Revert to the generic friendly message before shipping.
+        const friendly = `Something went wrong while creating your video. [${err.message}]`;
+        sessionStore.update(sessionId, { status: 'FAILED', error: friendly });
+        broadcast(sessionId, 'GENERATION_FAILED', { error: friendly });
         broadcast(sessionId, 'SESSION_STATE', publicSession(sessionStore.get(sessionId)));
       }
     });
