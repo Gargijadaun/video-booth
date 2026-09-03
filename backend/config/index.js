@@ -39,6 +39,10 @@ module.exports = {
     apiKey: str(process.env.ELEVENLABS_API_KEY, ''),
     model: str(process.env.ELEVENLABS_MODEL, 'veo-3.1-generate-001')
   },
+  openai: {
+    apiKey: str(process.env.OPENAI_API_KEY, ''),
+    model: str(process.env.OPENAI_IMAGE_MODEL, 'gpt-image-1')
+  },
 
   selfieTtlMinutes: num(process.env.SELFIE_TTL_MINUTES, 30),
   videoTtlMinutes: num(process.env.VIDEO_TTL_MINUTES, 1440),

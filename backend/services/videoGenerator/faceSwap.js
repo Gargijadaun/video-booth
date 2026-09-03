@@ -1,4 +1,3 @@
-const fetch = require('node-fetch');
 const config = require('../../config');
 
 /**
@@ -9,128 +8,72 @@ const config = require('../../config');
  * the guest's plain selfie (which produced bad, inconsistent results and a
  * jarring "starts as your selfie" first frame).
  *
- * Uses codeplugtech/face-swap on Replicate - cheap (~$0.001-0.006/call),
- * fast (usually well under a minute), CPU-only model.
- * Docs: https://replicate.com/codeplugtech/face-swap
- *
- * Replicate is prediction+poll based (no sync endpoint like fal had), so
- * this creates a prediction and polls it, same pattern as the main video
- * provider, with its own timeout so a stuck prediction can never hang the
- * whole generation indefinitely.
+ * Uses OpenAI's image edit endpoint (gpt-image-1), which accepts multiple
+ * reference images plus a text prompt in one call - no dedicated "face swap"
+ * endpoint exists, but multi-image editing with an explicit instruction
+ * achieves the same result. Synchronous (no polling needed).
+ * Schema verified against OpenAI's own published OpenAPI spec
+ * (https://github.com/openai/openai-openapi), not guessed.
  */
 
-const BASE_URL = 'https://api.replicate.com/v1';
-const MODEL = 'codeplugtech/face-swap';
-const POLL_INTERVAL_MS = 2000;
-const MAX_WAIT_MS = 90 * 1000;
+const ENDPOINT = 'https://api.openai.com/v1/images/edits';
+const REQUEST_TIMEOUT_MS = 60 * 1000;
 
-function fetchWithTimeout(url, options, timeoutMs) {
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), timeoutMs);
-  return fetch(url, { ...options, signal: controller.signal }).finally(() => clearTimeout(timer));
-}
-
-function sleep(ms) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
+const SWAP_PROMPT = [
+  "Swap the face from Image 2 onto Image 1, keeping Image 1's body, outfit,",
+  'pose, and proportions completely unchanged. Preserve Image 1\'s exact',
+  'background (plain white studio background, no scenery, no shadows,',
+  'no gradients). Photorealistic, consistent face identity from Image 2,',
+  'no distortion, no blending artifacts, natural skin tones, seamless',
+  'integration.'
+].join(' ');
 
 async function swapFaceOntoTemplate({ selfieBuffer, selfieMimeType, templateImageBuffer, templateImageMimeType }) {
-  if (!config.replicate.apiToken) {
-    throw new Error('REPLICATE_API_TOKEN is not set - required for template face swap.');
+  if (!config.openai.apiKey) {
+    throw new Error('OPENAI_API_KEY is not set - required for template face swap.');
   }
 
-  const swapDataUri = `data:${selfieMimeType};base64,${selfieBuffer.toString('base64')}`;
-  const inputDataUri = `data:${templateImageMimeType};base64,${templateImageBuffer.toString('base64')}`;
+  const form = new FormData();
+  form.append('model', config.openai.model);
+  form.append('prompt', SWAP_PROMPT);
+  form.append('size', '1024x1536');
+  // Image 1 = template (body/outfit/background to keep), Image 2 = selfie
+  // (face to use) - matches the ordering the prompt above refers to.
+  form.append('image[]', new Blob([templateImageBuffer], { type: templateImageMimeType }), 'template.jpg');
+  form.append('image[]', new Blob([selfieBuffer], { type: selfieMimeType }), 'selfie.jpg');
 
-  let createRes;
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
+
+  let res;
   try {
-    createRes = await fetchWithTimeout(
-      `${BASE_URL}/models/${MODEL}/predictions`,
-      {
-        method: 'POST',
-        headers: {
-          Authorization: `Token ${config.replicate.apiToken}`,
-          'Content-Type': 'application/json',
-          Prefer: 'wait=0'
-        },
-        body: JSON.stringify({
-          input: {
-            input_image: inputDataUri,
-            swap_image: swapDataUri
-          }
-        })
-      },
-      15000
-    );
+    res = await fetch(ENDPOINT, {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${config.openai.apiKey}` },
+      body: form,
+      signal: controller.signal
+    });
   } catch (err) {
-    if (err.name === 'AbortError') throw new Error('Face swap request timed out starting the prediction.');
+    if (err.name === 'AbortError') {
+      throw new Error(`Face swap request timed out after ${REQUEST_TIMEOUT_MS / 1000}s.`);
+    }
     throw err;
+  } finally {
+    clearTimeout(timer);
   }
 
-  if (!createRes.ok) {
-    const text = await createRes.text().catch(() => '');
-    throw new Error(`Face swap request failed (${createRes.status}): ${text.slice(0, 400)}`);
+  if (!res.ok) {
+    const text = await res.text().catch(() => '');
+    throw new Error(`Face swap request failed (${res.status}): ${text.slice(0, 500)}`);
   }
 
-  const prediction = await createRes.json();
-  if (!prediction.id) {
-    throw new Error('Replicate did not return a prediction id for face swap.');
+  const json = await res.json();
+  const b64 = json?.data?.[0]?.b64_json;
+  if (!b64) {
+    throw new Error('Face swap completed but returned no image data.');
   }
 
-  const startedAt = Date.now();
-  let finalPrediction;
-
-  while (true) {
-    if (Date.now() - startedAt > MAX_WAIT_MS) {
-      throw new Error(`Face swap timed out after ${MAX_WAIT_MS / 1000}s.`);
-    }
-
-    await sleep(POLL_INTERVAL_MS);
-
-    let statusRes;
-    try {
-      statusRes = await fetchWithTimeout(
-        `${BASE_URL}/predictions/${prediction.id}`,
-        { headers: { Authorization: `Token ${config.replicate.apiToken}` } },
-        15000
-      );
-    } catch (err) {
-      if (err.name === 'AbortError') continue; // transient - keep polling within the overall MAX_WAIT_MS budget
-      throw err;
-    }
-
-    if (!statusRes.ok) {
-      throw new Error(`Face swap status check failed (${statusRes.status}).`);
-    }
-
-    finalPrediction = await statusRes.json();
-
-    if (finalPrediction.status === 'succeeded') break;
-    if (finalPrediction.status === 'failed' || finalPrediction.status === 'canceled') {
-      throw new Error(`Face swap ${finalPrediction.status}: ${finalPrediction.error || 'unknown error'}`);
-    }
-    // starting / processing - keep polling
-  }
-
-  const output = finalPrediction.output;
-  const imageUrl = Array.isArray(output) ? output[0] : output;
-  if (!imageUrl) {
-    throw new Error('Face swap succeeded but returned no output image.');
-  }
-
-  let imageRes;
-  try {
-    imageRes = await fetchWithTimeout(imageUrl, {}, 30000);
-  } catch (err) {
-    if (err.name === 'AbortError') throw new Error('Timed out downloading the face-swapped image.');
-    throw err;
-  }
-  if (!imageRes.ok) {
-    throw new Error(`Failed to download face-swapped image (${imageRes.status}).`);
-  }
-
-  const imageBuffer = Buffer.from(await imageRes.arrayBuffer());
-  return { imageBuffer, imageMimeType: 'image/png' };
+  return { imageBuffer: Buffer.from(b64, 'base64'), imageMimeType: 'image/png' };
 }
 
 module.exports = { swapFaceOntoTemplate };

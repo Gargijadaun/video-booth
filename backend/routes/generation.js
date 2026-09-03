@@ -90,9 +90,9 @@ async function runGenerationJob(sessionStore, sessionId, jobId, template) {
   let imageBuffer = selfieBuffer;
   let imageMimeType = 'image/jpeg';
 
-  // The face-swap step (Replicate) is independent of which provider actually
-  // generates the video - it just needs a Replicate token configured.
-  if (config.replicate.apiToken && template.thumbnail) {
+  // The face-swap step (OpenAI) is independent of which provider actually
+  // generates the video - it just needs an OpenAI key configured.
+  if (config.openai.apiKey && template.thumbnail) {
     try {
       const templateImagePath = path.join(__dirname, '..', 'templates', 'assets', path.basename(template.thumbnail));
       const templateImageBuffer = fs.readFileSync(templateImagePath);
