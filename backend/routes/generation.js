@@ -76,6 +76,11 @@ async function runGenerationJob(sessionStore, sessionId, jobId, template) {
 
   const selfieBuffer = fs.readFileSync(session.selfiePath);
 
+  // Fire progress feedback immediately - the face swap step below can take a
+  // noticeable few seconds, and guests should never stare at a spinner with
+  // zero message change while it runs.
+  broadcast(sessionId, 'GENERATION_PROGRESS', { progress: 5, message: 'Preparing your character...' });
+
   // Swap the guest's face onto the template's own reference photo BEFORE video
   // generation, so the model gets an image that already shows them in the
   // correct costume/pose - instead of guessing the costume from text while
@@ -123,7 +128,7 @@ async function runGenerationJob(sessionStore, sessionId, jobId, template) {
     aspectRatio: template.aspectRatio
   });
 
-  broadcast(sessionId, 'GENERATION_PROGRESS', { progress: 10, message: 'Preparing your character...' });
+  broadcast(sessionId, 'GENERATION_PROGRESS', { progress: 15, message: 'Creating your scene...' });
 
   const startedAt = Date.now();
   let result;

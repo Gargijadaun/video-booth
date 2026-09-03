@@ -15,6 +15,13 @@ const config = require('../../config');
  */
 
 const ENDPOINT = 'https://fal.run/easel-ai/advanced-face-swap';
+const REQUEST_TIMEOUT_MS = 45 * 1000;
+
+function fetchWithTimeout(url, options, timeoutMs) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+  return fetch(url, { ...options, signal: controller.signal }).finally(() => clearTimeout(timer));
+}
 
 async function swapFaceOntoTemplate({ selfieBuffer, selfieMimeType, templateImageBuffer, templateImageMimeType, gender }) {
   if (!config.fal.apiKey) {
@@ -24,20 +31,35 @@ async function swapFaceOntoTemplate({ selfieBuffer, selfieMimeType, templateImag
   const faceDataUri = `data:${selfieMimeType};base64,${selfieBuffer.toString('base64')}`;
   const targetDataUri = `data:${templateImageMimeType};base64,${templateImageBuffer.toString('base64')}`;
 
-  const res = await fetch(ENDPOINT, {
-    method: 'POST',
-    headers: {
-      Authorization: `Key ${config.fal.apiKey}`,
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      face_image_0: faceDataUri,
-      gender_0: gender === 'female' ? 'female' : 'male',
-      target_image: targetDataUri,
-      workflow_type: 'target_hair',
-      upscale: true
-    })
-  });
+  let res;
+  try {
+    res = await fetchWithTimeout(
+      ENDPOINT,
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `Key ${config.fal.apiKey}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          face_image_0: faceDataUri,
+          gender_0: gender === 'female' ? 'female' : 'male',
+          target_image: targetDataUri,
+          workflow_type: 'target_hair',
+          // upscale adds meaningful extra processing time for a step that
+          // should be quick - the video model's own output resolution
+          // dominates final quality anyway, so skip it here for speed.
+          upscale: false
+        })
+      },
+      REQUEST_TIMEOUT_MS
+    );
+  } catch (err) {
+    if (err.name === 'AbortError') {
+      throw new Error(`Face swap request timed out after ${REQUEST_TIMEOUT_MS / 1000}s.`);
+    }
+    throw err;
+  }
 
   if (!res.ok) {
     const text = await res.text().catch(() => '');
@@ -50,7 +72,15 @@ async function swapFaceOntoTemplate({ selfieBuffer, selfieMimeType, templateImag
     throw new Error('Face swap completed but returned no image URL.');
   }
 
-  const imageRes = await fetch(imageUrl);
+  let imageRes;
+  try {
+    imageRes = await fetchWithTimeout(imageUrl, {}, REQUEST_TIMEOUT_MS);
+  } catch (err) {
+    if (err.name === 'AbortError') {
+      throw new Error(`Timed out downloading face-swapped image after ${REQUEST_TIMEOUT_MS / 1000}s.`);
+    }
+    throw err;
+  }
   if (!imageRes.ok) {
     throw new Error(`Failed to download face-swapped image (${imageRes.status}).`);
   }
