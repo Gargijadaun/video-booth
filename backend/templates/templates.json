@@ -7,7 +7,7 @@
     "thumbnail": "/templates/superhero_male.jpg",
     "prompt": "Create a cinematic vertical video featuring the person from the reference image as an original futuristic superhero. Preserve the person's exact facial identity and recognizable facial features. The character confidently walks toward the camera through a futuristic city at night, wearing a premium original superhero suit and flowing cape. Subtle wind moves the cape and clothing naturally. Cinematic lighting, realistic skin, realistic body proportions, dramatic atmosphere, shallow depth of field, smooth camera tracking, premium movie-quality visuals, natural walking motion, highly detailed environment. Keep the person's face consistent throughout the entire video. No face distortion, no identity changes, no extra people.",
     "negativePrompt": "face distortion, identity change, extra fingers, extra limbs, facial melting, duplicate people, sudden costume changes, camera cuts, warped body, unnatural walking, blurry, low quality",
-    "duration": 10,
+    "duration": 5,
     "aspectRatio": "9:16",
     "outputResolution": "1080x1920",
     "active": true
@@ -18,9 +18,9 @@
     "gender": "male",
     "description": "Walk through a smoky, dramatic action-movie set with cinematic lighting and slow camera tracking.",
     "thumbnail": "/templates/action_hero_male.jpg",
-    "prompt": "Create a cinematic 10-second vertical action sequence using the person in the reference image. Preserve exact facial identity. The person confidently walks toward the camera through a dramatic action-movie environment with smoke, atmospheric lighting and subtle environmental movement. Realistic body movement, natural walking, cinematic camera tracking, realistic skin texture, dramatic lighting, premium film quality, consistent face throughout.",
+    "prompt": "Create a cinematic 5-second vertical action sequence using the person in the reference image. Preserve exact facial identity. The person confidently walks toward the camera through a dramatic action-movie environment with smoke, atmospheric lighting and subtle environmental movement. Realistic body movement, natural walking, cinematic camera tracking, realistic skin texture, dramatic lighting, premium film quality, consistent face throughout.",
     "negativePrompt": "face distortion, identity change, extra fingers, extra limbs, facial melting, duplicate people, sudden costume changes, camera cuts, warped body, unnatural walking, blurry, low quality",
-    "duration": 10,
+    "duration": 5,
     "aspectRatio": "9:16",
     "outputResolution": "1080x1920",
     "active": true
@@ -33,7 +33,7 @@
     "thumbnail": "/templates/secret_agent_male.jpg",
     "prompt": "Create a cinematic vertical spy movie scene using the person from the reference image. Preserve exact facial identity. The person wears an elegant black suit and confidently walks through a modern city at night. Camera slowly tracks backward while the person walks toward the camera. Subtle wind, realistic lighting, cinematic reflections, premium spy-thriller atmosphere, realistic movement, natural face, consistent identity throughout.",
     "negativePrompt": "face distortion, identity change, extra fingers, extra limbs, facial melting, duplicate people, sudden costume changes, camera cuts, warped body, unnatural walking, blurry, low quality",
-    "duration": 10,
+    "duration": 5,
     "aspectRatio": "9:16",
     "outputResolution": "1080x1920",
     "active": true
@@ -46,7 +46,7 @@
     "thumbnail": "/templates/futuristic_warrior_male.jpg",
     "prompt": "Create a cinematic futuristic warrior scene using the person from the reference image. Preserve exact facial identity. The person walks confidently through a futuristic neon city wearing original advanced sci-fi armor. Camera tracks backward smoothly as the character approaches. Neon reflections, atmospheric fog, realistic armor, realistic human movement, cinematic lighting, premium science-fiction movie quality, consistent face throughout.",
     "negativePrompt": "face distortion, identity change, extra fingers, extra limbs, facial melting, duplicate people, sudden costume changes, camera cuts, warped body, unnatural walking, blurry, low quality",
-    "duration": 10,
+    "duration": 5,
     "aspectRatio": "9:16",
     "outputResolution": "1080x1920",
     "active": true
@@ -59,7 +59,7 @@
     "thumbnail": "/templates/royal_king_male.jpg",
     "prompt": "Create a cinematic vertical scene using the person from the reference image as a royal king. Preserve exact facial identity and facial structure. He walks slowly and confidently through a luxurious palace hall wearing an ornate royal robe with fine detail. Golden ambient lighting, soft shadows, realistic fabric movement, cinematic camera tracking, premium period-drama film quality, consistent face throughout the video.",
     "negativePrompt": "face distortion, identity change, extra fingers, extra limbs, facial melting, duplicate people, sudden costume changes, camera cuts, warped body, unnatural walking, blurry, low quality",
-    "duration": 10,
+    "duration": 5,
     "aspectRatio": "9:16",
     "outputResolution": "1080x1920",
     "active": true
@@ -72,7 +72,7 @@
     "thumbnail": "/templates/superhero_female.jpg",
     "prompt": "Create a cinematic vertical video featuring the person from the reference image as an original futuristic superheroine. Preserve the person's exact facial identity and recognizable facial features. The character confidently walks toward the camera through a futuristic city at night, wearing a premium original superhero suit with a flowing cape. Subtle wind moves the cape and clothing naturally. Cinematic lighting, realistic skin, realistic body proportions, dramatic atmosphere, shallow depth of field, smooth camera tracking, premium movie-quality visuals, natural walking motion, highly detailed environment. Keep the person's face consistent throughout the entire video. No face distortion, no identity changes, no extra people.",
     "negativePrompt": "face distortion, identity change, extra fingers, extra limbs, facial melting, duplicate people, sudden costume changes, camera cuts, warped body, unnatural walking, blurry, low quality",
-    "duration": 10,
+    "duration": 5,
     "aspectRatio": "9:16",
     "outputResolution": "1080x1920",
     "active": true
@@ -83,9 +83,9 @@
     "gender": "female",
     "description": "Confident, cinematic action-movie walk with dramatic lighting and atmosphere.",
     "thumbnail": "/templates/action_heroine_female.jpg",
-    "prompt": "Create a cinematic 10-second vertical action sequence using the person in the reference image. Preserve exact facial identity. The person confidently walks toward the camera through a dramatic cinematic action environment with atmospheric lighting and subtle environmental movement. Realistic body movement, natural walking, cinematic camera tracking, realistic skin texture, dramatic lighting, premium film quality, consistent face throughout.",
+    "prompt": "Create a cinematic 5-second vertical action sequence using the person in the reference image. Preserve exact facial identity. The person confidently walks toward the camera through a dramatic cinematic action environment with atmospheric lighting and subtle environmental movement. Realistic body movement, natural walking, cinematic camera tracking, realistic skin texture, dramatic lighting, premium film quality, consistent face throughout.",
     "negativePrompt": "face distortion, identity change, extra fingers, extra limbs, facial melting, duplicate people, sudden costume changes, camera cuts, warped body, unnatural walking, blurry, low quality",
-    "duration": 10,
+    "duration": 5,
     "aspectRatio": "9:16",
     "outputResolution": "1080x1920",
     "active": true
@@ -98,7 +98,7 @@
     "thumbnail": "/templates/secret_agent_female.jpg",
     "prompt": "Create a cinematic vertical spy movie scene using the person from the reference image. Preserve exact facial identity. The person wears an elegant black outfit and confidently walks through a modern city at night. Camera slowly tracks backward while the person walks toward the camera. Subtle wind, realistic lighting, cinematic reflections, premium spy-thriller atmosphere, realistic movement, natural face, consistent identity throughout.",
     "negativePrompt": "face distortion, identity change, extra fingers, extra limbs, facial melting, duplicate people, sudden costume changes, camera cuts, warped body, unnatural walking, blurry, low quality",
-    "duration": 10,
+    "duration": 5,
     "aspectRatio": "9:16",
     "outputResolution": "1080x1920",
     "active": true
@@ -111,7 +111,7 @@
     "thumbnail": "/templates/fantasy_queen_female.jpg",
     "prompt": "Create a cinematic fantasy scene using the person from the reference image as an elegant fantasy queen. Preserve exact facial identity and facial structure. She walks gracefully through a magnificent fantasy palace surrounded by soft magical lighting and subtle floating particles. Elegant costume movement, natural walking, realistic skin, cinematic camera movement, premium fantasy film quality, consistent face throughout the video.",
     "negativePrompt": "face distortion, identity change, extra fingers, extra limbs, facial melting, duplicate people, sudden costume changes, camera cuts, warped body, unnatural walking, blurry, low quality",
-    "duration": 10,
+    "duration": 5,
     "aspectRatio": "9:16",
     "outputResolution": "1080x1920",
     "active": true
@@ -124,7 +124,7 @@
     "thumbnail": "/templates/futuristic_warrior_female.jpg",
     "prompt": "Create a cinematic futuristic warrior scene using the person from the reference image. Preserve exact facial identity. The person walks confidently through a futuristic neon city wearing original advanced sci-fi armor. Camera tracks backward smoothly as the character approaches. Neon reflections, atmospheric fog, realistic armor, realistic human movement, cinematic lighting, premium science-fiction movie quality, consistent face throughout.",
     "negativePrompt": "face distortion, identity change, extra fingers, extra limbs, facial melting, duplicate people, sudden costume changes, camera cuts, warped body, unnatural walking, blurry, low quality",
-    "duration": 10,
+    "duration": 5,
     "aspectRatio": "9:16",
     "outputResolution": "1080x1920",
     "active": true
@@ -137,7 +137,7 @@
     "thumbnail": "/templates/mythic_guardian_male.jpg",
     "prompt": "Create a cinematic vertical video featuring the person from the reference image as an original divine mythical guardian hero. Preserve the person's exact facial identity and recognizable facial features. The character confidently walks toward the camera, wearing a radiant red and gold original superhero suit with a glowing chest emblem and a flowing cape, surrounded by a subtle golden radiant aura and soft glowing particles. Cinematic lighting, realistic skin, realistic body proportions, majestic atmosphere, shallow depth of field, smooth camera tracking, premium movie-quality visuals, natural walking motion, highly detailed costume. Keep the person's face consistent throughout the entire video. No face distortion, no identity changes, no extra people.",
     "negativePrompt": "face distortion, identity change, extra fingers, extra limbs, facial melting, duplicate people, sudden costume changes, camera cuts, warped body, unnatural walking, blurry, low quality",
-    "duration": 10,
+    "duration": 5,
     "aspectRatio": "9:16",
     "outputResolution": "1080x1920",
     "active": true
@@ -150,7 +150,7 @@
     "thumbnail": "/templates/mythic_guardian_female.jpg",
     "prompt": "Create a cinematic vertical video featuring the person from the reference image as an original divine mythical guardian heroine. Preserve the person's exact facial identity and recognizable facial features. The character confidently walks toward the camera, wearing a radiant red and gold original superhero suit with a glowing chest emblem and a flowing cape, surrounded by a subtle golden radiant aura and soft glowing particles. Cinematic lighting, realistic skin, realistic body proportions, majestic atmosphere, shallow depth of field, smooth camera tracking, premium movie-quality visuals, natural walking motion, highly detailed costume. Keep the person's face consistent throughout the entire video. No face distortion, no identity changes, no extra people.",
     "negativePrompt": "face distortion, identity change, extra fingers, extra limbs, facial melting, duplicate people, sudden costume changes, camera cuts, warped body, unnatural walking, blurry, low quality",
-    "duration": 10,
+    "duration": 5,
     "aspectRatio": "9:16",
     "outputResolution": "1080x1920",
     "active": true
