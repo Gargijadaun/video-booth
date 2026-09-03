@@ -90,7 +90,7 @@ async function runGenerationJob(sessionStore, sessionId, jobId, template) {
   let imageBuffer = selfieBuffer;
   let imageMimeType = 'image/jpeg';
 
-  if (config.videoProvider === 'fal' && template.thumbnail) {
+  if (config.videoProvider === 'replicate' && template.thumbnail) {
     try {
       const templateImagePath = path.join(__dirname, '..', 'templates', 'assets', path.basename(template.thumbnail));
       const templateImageBuffer = fs.readFileSync(templateImagePath);
@@ -98,8 +98,7 @@ async function runGenerationJob(sessionStore, sessionId, jobId, template) {
         selfieBuffer,
         selfieMimeType: 'image/jpeg',
         templateImageBuffer,
-        templateImageMimeType: 'image/jpeg',
-        gender: template.gender
+        templateImageMimeType: 'image/jpeg'
       });
       imageBuffer = swapped.imageBuffer;
       imageMimeType = swapped.imageMimeType;
