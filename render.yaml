@@ -17,11 +17,11 @@ services:
       - key: CORS_ORIGIN
         value: "*"
       - key: VIDEO_PROVIDER
-        value: mock
+        value: fal
       - key: FAL_API_KEY
         sync: false
       - key: FAL_MODEL
-        value: fal-ai/wan-i2v
+        value: fal-ai/veo3.1/image-to-video
       - key: REPLICATE_API_TOKEN
         sync: false
       - key: REPLICATE_MODEL

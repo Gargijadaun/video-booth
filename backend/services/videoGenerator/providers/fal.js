@@ -2,15 +2,25 @@ const fetch = require('node-fetch');
 const config = require('../../../config');
 
 /**
- * Fal.ai queue-based image-to-video provider (default recommended provider).
- * Docs: https://fal.ai/models/fal-ai/wan-i2v
+ * Fal.ai queue-based image-to-video provider, targeting fal-ai/veo3.1/image-to-video.
+ * Docs (verified via the endpoint's own OpenAPI schema, not guessed):
+ * https://fal.ai/models/fal-ai/veo3.1/image-to-video
  *
- * Fal exposes a generic async "queue" protocol that is the same shape for
- * every model it hosts, so this one implementation works for Wan, Kling, or
- * any other fal i2v model - just change FAL_MODEL.
+ * The queue submit/poll/result protocol (this file's overall shape) is the
+ * same across fal models, but the INPUT body fields are not - Veo 3.1 uses
+ * duration as an enum string ("4s"/"6s"/"8s"), not a frame count, and has no
+ * negative_prompt/enable_safety_checker (it has safety_tolerance instead).
+ * If FAL_MODEL is changed to a different model, this body will likely need
+ * adjusting to match - it is not a generic contract, unlike checkJob() below.
  */
 
 const BASE_URL = 'https://queue.fal.run';
+
+function mapDurationToVeoEnum(durationSeconds) {
+  if (durationSeconds <= 5) return '4s';
+  if (durationSeconds <= 7) return '6s';
+  return '8s';
+}
 
 function assertConfigured() {
   if (!config.fal.apiKey) {
@@ -33,12 +43,12 @@ async function startJob({ imageBuffer, imageMimeType, prompt, negativePrompt, du
       image_url: dataUri,
       prompt,
       negative_prompt: negativePrompt,
-      // fal-ai/wan-i2v requires num_frames >= 81 (a hard model constraint, not
-      // configurable) - clamp the low end so short template durations (e.g. 5s
-      // at 16fps = 80 frames) don't get silently rejected with a 422.
-      num_frames: Math.max(81, Math.min(durationSeconds * 16, 161)),
-      aspect_ratio: aspectRatio,
-      enable_safety_checker: true
+      duration: mapDurationToVeoEnum(durationSeconds),
+      aspect_ratio: aspectRatio === '9:16' ? '9:16' : 'auto',
+      resolution: '720p',
+      // Audio defaults to true on this model, which doubles the per-second
+      // price ($0.40/s vs $0.20/s) for a booth that never plays audio anyway.
+      generate_audio: false
     })
   });
 
