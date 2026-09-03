@@ -33,7 +33,10 @@ async function startJob({ imageBuffer, imageMimeType, prompt, negativePrompt, du
       image_url: dataUri,
       prompt,
       negative_prompt: negativePrompt,
-      num_frames: Math.min(durationSeconds * 16, 161),
+      // fal-ai/wan-i2v requires num_frames >= 81 (a hard model constraint, not
+      // configurable) - clamp the low end so short template durations (e.g. 5s
+      // at 16fps = 80 frames) don't get silently rejected with a 422.
+      num_frames: Math.max(81, Math.min(durationSeconds * 16, 161)),
       aspect_ratio: aspectRatio,
       enable_safety_checker: true
     })
