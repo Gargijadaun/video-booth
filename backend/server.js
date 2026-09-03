@@ -13,6 +13,13 @@ const { sessionLimiter, uploadLimiter, generationLimiter } = require('./middlewa
 const app = express();
 const httpServer = http.createServer(app);
 
+// Render (and most PaaS hosts) sit one reverse proxy in front of this app and
+// set X-Forwarded-For accordingly. Trusting exactly that one hop lets
+// express-rate-limit (and req.ip generally) see the real client IP instead
+// of the proxy's, without blindly trusting an arbitrary forwarded chain a
+// client could spoof.
+app.set('trust proxy', 1);
+
 app.use(cors({ origin: config.corsOrigin }));
 app.use(express.json());
 
