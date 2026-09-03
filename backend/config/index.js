@@ -43,6 +43,10 @@ module.exports = {
     apiKey: str(process.env.OPENAI_API_KEY, ''),
     model: str(process.env.OPENAI_IMAGE_MODEL, 'gpt-image-1')
   },
+  gemini: {
+    apiKey: str(process.env.GEMINI_API_KEY, ''),
+    model: str(process.env.GEMINI_MODEL, 'gemini-2.5-flash-image')
+  },
 
   selfieTtlMinutes: num(process.env.SELFIE_TTL_MINUTES, 30),
   videoTtlMinutes: num(process.env.VIDEO_TTL_MINUTES, 1440),

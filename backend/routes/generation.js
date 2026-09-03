@@ -81,8 +81,8 @@ module.exports = function createGenerationRouter(sessionStore) {
     if (!session.selfiePath || !fs.existsSync(session.selfiePath)) {
       return res.status(400).json({ error: 'No photo uploaded yet. Please take a photo first.' });
     }
-    if (!config.fal.apiKey) {
-      return res.status(400).json({ error: 'FAL_API_KEY is not set - face swap is not configured.' });
+    if (!config.gemini.apiKey) {
+      return res.status(400).json({ error: 'GEMINI_API_KEY is not set - face swap is not configured.' });
     }
 
     const template = templates.find((t) => t.id === session.templateId && t.active);
@@ -98,8 +98,7 @@ module.exports = function createGenerationRouter(sessionStore) {
         selfieBuffer,
         selfieMimeType: 'image/jpeg',
         templateImageBuffer,
-        templateImageMimeType: 'image/jpeg',
-        gender: template.gender
+        templateImageMimeType: 'image/jpeg'
       });
       const dataUrl = `data:${swapped.imageMimeType};base64,${swapped.imageBuffer.toString('base64')}`;
       res.json({ previewImage: dataUrl });
@@ -132,9 +131,9 @@ async function runGenerationJob(sessionStore, sessionId, jobId, template) {
   let imageBuffer = selfieBuffer;
   let imageMimeType = 'image/jpeg';
 
-  // The face-swap step (fal.ai Easel) is independent of which provider
-  // actually generates the video - it just needs FAL_API_KEY configured.
-  if (config.fal.apiKey && template.thumbnail) {
+  // The face-swap step (Gemini) is independent of which provider actually
+  // generates the video - it just needs GEMINI_API_KEY configured.
+  if (config.gemini.apiKey && template.thumbnail) {
     try {
       const templateImagePath = path.join(__dirname, '..', 'templates', 'assets', path.basename(template.thumbnail));
       const templateImageBuffer = fs.readFileSync(templateImagePath);
@@ -142,8 +141,7 @@ async function runGenerationJob(sessionStore, sessionId, jobId, template) {
         selfieBuffer,
         selfieMimeType: 'image/jpeg',
         templateImageBuffer,
-        templateImageMimeType: 'image/jpeg',
-        gender: template.gender
+        templateImageMimeType: 'image/jpeg'
       });
       imageBuffer = swapped.imageBuffer;
       imageMimeType = swapped.imageMimeType;

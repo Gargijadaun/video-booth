@@ -9,20 +9,35 @@ const config = require('../../config');
  * the guest's plain selfie (which produced bad, inconsistent results and a
  * jarring "starts as your selfie" first frame).
  *
- * Uses Easel AI's Advanced Face Swap on fal.ai (sync endpoint, not the
- * queue API - a single fast image operation, ~$0.05/call). This is a real
- * face-swap model (face detection + landmark-based blending of the actual
- * source face), not a generative reimagining - tried gpt-image-1 first
- * (see git history), which even with a locking mask on everything but the
- * face region still couldn't transfer exact identity because it's a
- * diffusion model that reinterprets a face "inspired by" the reference
- * rather than transplanting the real one. That's a ceiling no prompt or
- * mask can fix, which is why this uses a purpose-built swap model instead.
- * Docs: https://fal.ai/models/easel-ai/advanced-face-swap
+ * Uses Google's Gemini 2.5 Flash Image ("Nano Banana"), specifically known
+ * for strong character/identity consistency across multi-image edits.
+ * Schema verified against real generateContent examples (an initial doc
+ * fetch returned a hallucinated "interactions" endpoint that doesn't
+ * actually exist - confirmed the real one via working code samples instead
+ * of trusting a single scraped page).
+ *
+ * POST https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent
+ * Auth: x-goog-api-key header. Multiple images go in as separate `parts`
+ * with inlineData; the model returns image part(s) back in the same shape.
+ *
+ * Unlike the OpenAI attempt, there's no mask parameter here - identity and
+ * "don't change anything else" are both carried by the prompt alone, relying
+ * on this model's specific strength at holding everything but the requested
+ * edit steady.
  */
 
-const ENDPOINT = 'https://fal.run/easel-ai/advanced-face-swap';
+const ENDPOINT_BASE = 'https://generativelanguage.googleapis.com/v1beta/models';
 const REQUEST_TIMEOUT_MS = 45 * 1000;
+
+const SWAP_PROMPT = [
+  'Image 1 is a reference photo of a costume/character on a plain white',
+  'studio background. Image 2 is a photo of a real person. Generate a new',
+  "version of Image 1 where the person's face is replaced with the face",
+  'from Image 2 - same identity, same facial features, same skin tone as',
+  'Image 2. Do not change anything else: keep the exact body, outfit, pose,',
+  'proportions, height, and plain white background from Image 1 unchanged.',
+  'Photorealistic, seamless blending, no distortion.'
+].join(' ');
 
 function fetchWithTimeout(url, options, timeoutMs) {
   const controller = new AbortController();
@@ -30,33 +45,33 @@ function fetchWithTimeout(url, options, timeoutMs) {
   return fetch(url, { ...options, signal: controller.signal }).finally(() => clearTimeout(timer));
 }
 
-async function swapFaceOntoTemplate({ selfieBuffer, selfieMimeType, templateImageBuffer, templateImageMimeType, gender }) {
-  if (!config.fal.apiKey) {
-    throw new Error('FAL_API_KEY is not set - required for template face swap.');
+async function swapFaceOntoTemplate({ selfieBuffer, selfieMimeType, templateImageBuffer, templateImageMimeType }) {
+  if (!config.gemini.apiKey) {
+    throw new Error('GEMINI_API_KEY is not set - required for template face swap.');
   }
 
-  const faceDataUri = `data:${selfieMimeType};base64,${selfieBuffer.toString('base64')}`;
-  const targetDataUri = `data:${templateImageMimeType};base64,${templateImageBuffer.toString('base64')}`;
+  const url = `${ENDPOINT_BASE}/${config.gemini.model}:generateContent`;
 
   let res;
   try {
     res = await fetchWithTimeout(
-      ENDPOINT,
+      url,
       {
         method: 'POST',
         headers: {
-          Authorization: `Key ${config.fal.apiKey}`,
+          'x-goog-api-key': config.gemini.apiKey,
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          face_image_0: faceDataUri,
-          gender_0: gender === 'female' ? 'female' : 'male',
-          target_image: targetDataUri,
-          workflow_type: 'target_hair',
-          // upscale adds meaningful extra processing time for a step that
-          // should be quick - the video model's own output resolution
-          // dominates final quality anyway, so skip it here for speed.
-          upscale: false
+          contents: [
+            {
+              parts: [
+                { text: SWAP_PROMPT },
+                { inlineData: { mimeType: templateImageMimeType, data: templateImageBuffer.toString('base64') } },
+                { inlineData: { mimeType: selfieMimeType, data: selfieBuffer.toString('base64') } }
+              ]
+            }
+          ]
         })
       },
       REQUEST_TIMEOUT_MS
@@ -70,30 +85,22 @@ async function swapFaceOntoTemplate({ selfieBuffer, selfieMimeType, templateImag
 
   if (!res.ok) {
     const text = await res.text().catch(() => '');
-    throw new Error(`Face swap request failed (${res.status}): ${text.slice(0, 400)}`);
+    throw new Error(`Face swap request failed (${res.status}): ${text.slice(0, 500)}`);
   }
 
   const json = await res.json();
-  const imageUrl = json?.image?.url;
-  if (!imageUrl) {
-    throw new Error('Face swap completed but returned no image URL.');
+  const parts = json?.candidates?.[0]?.content?.parts || [];
+  const imagePart = parts.find((p) => p.inlineData?.data);
+
+  if (!imagePart) {
+    const textPart = parts.find((p) => p.text)?.text;
+    throw new Error(`Face swap returned no image. ${textPart ? `Model said: ${textPart.slice(0, 300)}` : ''}`);
   }
 
-  let imageRes;
-  try {
-    imageRes = await fetchWithTimeout(imageUrl, {}, REQUEST_TIMEOUT_MS);
-  } catch (err) {
-    if (err.name === 'AbortError') {
-      throw new Error(`Timed out downloading face-swapped image after ${REQUEST_TIMEOUT_MS / 1000}s.`);
-    }
-    throw err;
-  }
-  if (!imageRes.ok) {
-    throw new Error(`Failed to download face-swapped image (${imageRes.status}).`);
-  }
-
-  const imageBuffer = Buffer.from(await imageRes.arrayBuffer());
-  return { imageBuffer, imageMimeType: json.image.content_type || 'image/png' };
+  return {
+    imageBuffer: Buffer.from(imagePart.inlineData.data, 'base64'),
+    imageMimeType: imagePart.inlineData.mimeType || 'image/png'
+  };
 }
 
 module.exports = { swapFaceOntoTemplate };

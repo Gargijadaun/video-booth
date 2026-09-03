@@ -34,6 +34,10 @@ services:
         sync: false
       - key: OPENAI_IMAGE_MODEL
         value: gpt-image-1
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: GEMINI_MODEL
+        value: gemini-2.5-flash-image
       - key: SELFIE_TTL_MINUTES
         value: 30
       - key: VIDEO_TTL_MINUTES
