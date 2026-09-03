@@ -60,7 +60,8 @@ async function checkJob(providerJobId) {
   });
 
   if (!statusRes.ok) {
-    return { status: 'failed', error: `Fal status check failed (${statusRes.status})` };
+    const text = await statusRes.text().catch(() => '');
+    return { status: 'failed', error: `Fal status check failed (${statusRes.status}): ${text.slice(0, 500)}` };
   }
 
   const status = await statusRes.json();
@@ -70,7 +71,7 @@ async function checkJob(providerJobId) {
   }
 
   if (status.status !== 'COMPLETED') {
-    return { status: 'failed', error: `Unexpected Fal status: ${status.status}` };
+    return { status: 'failed', error: `Unexpected Fal status: ${status.status} - ${JSON.stringify(status).slice(0, 500)}` };
   }
 
   const resultRes = await fetch(`${BASE_URL}/${config.fal.model}/requests/${providerJobId}`, {
@@ -78,7 +79,8 @@ async function checkJob(providerJobId) {
   });
 
   if (!resultRes.ok) {
-    return { status: 'failed', error: `Fal result fetch failed (${resultRes.status})` };
+    const text = await resultRes.text().catch(() => '');
+    return { status: 'failed', error: `Fal result fetch failed (${resultRes.status}): ${text.slice(0, 500)}` };
   }
 
   const result = await resultRes.json();
