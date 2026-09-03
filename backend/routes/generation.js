@@ -98,7 +98,8 @@ module.exports = function createGenerationRouter(sessionStore) {
         selfieBuffer,
         selfieMimeType: 'image/jpeg',
         templateImageBuffer,
-        templateImageMimeType: 'image/jpeg'
+        templateImageMimeType: 'image/jpeg',
+        faceRegion: template.faceRegion
       });
       const dataUrl = `data:${swapped.imageMimeType};base64,${swapped.imageBuffer.toString('base64')}`;
       res.json({ previewImage: dataUrl });
@@ -141,7 +142,8 @@ async function runGenerationJob(sessionStore, sessionId, jobId, template) {
         selfieBuffer,
         selfieMimeType: 'image/jpeg',
         templateImageBuffer,
-        templateImageMimeType: 'image/jpeg'
+        templateImageMimeType: 'image/jpeg',
+        faceRegion: template.faceRegion
       });
       imageBuffer = swapped.imageBuffer;
       imageMimeType = swapped.imageMimeType;

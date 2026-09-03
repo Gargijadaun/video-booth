@@ -16,7 +16,13 @@
     "duration": 5,
     "aspectRatio": "9:16",
     "outputResolution": "1080x1920",
-    "active": true
+    "active": true,
+    "faceRegion": {
+      "top": 0.02,
+      "bottom": 0.2,
+      "left": 0.32,
+      "right": 0.62
+    }
   },
   {
     "id": "action_hero_male",
@@ -35,7 +41,13 @@
     "duration": 5,
     "aspectRatio": "9:16",
     "outputResolution": "1080x1920",
-    "active": true
+    "active": true,
+    "faceRegion": {
+      "top": 0.03,
+      "bottom": 0.19,
+      "left": 0.34,
+      "right": 0.6
+    }
   },
   {
     "id": "secret_agent_male",
@@ -54,7 +66,13 @@
     "duration": 5,
     "aspectRatio": "9:16",
     "outputResolution": "1080x1920",
-    "active": true
+    "active": true,
+    "faceRegion": {
+      "top": 0.04,
+      "bottom": 0.21,
+      "left": 0.33,
+      "right": 0.6
+    }
   },
   {
     "id": "futuristic_warrior_male",
@@ -73,7 +91,13 @@
     "duration": 5,
     "aspectRatio": "9:16",
     "outputResolution": "1080x1920",
-    "active": true
+    "active": true,
+    "faceRegion": {
+      "top": 0.04,
+      "bottom": 0.2,
+      "left": 0.34,
+      "right": 0.6
+    }
   },
   {
     "id": "royal_king_male",
@@ -92,7 +116,13 @@
     "duration": 5,
     "aspectRatio": "9:16",
     "outputResolution": "1080x1920",
-    "active": true
+    "active": true,
+    "faceRegion": {
+      "top": 0.07,
+      "bottom": 0.27,
+      "left": 0.33,
+      "right": 0.62
+    }
   },
   {
     "id": "superhero_female",
@@ -111,7 +141,13 @@
     "duration": 5,
     "aspectRatio": "9:16",
     "outputResolution": "1080x1920",
-    "active": true
+    "active": true,
+    "faceRegion": {
+      "top": 0.1,
+      "bottom": 0.27,
+      "left": 0.34,
+      "right": 0.6
+    }
   },
   {
     "id": "action_heroine_female",
@@ -130,7 +166,13 @@
     "duration": 5,
     "aspectRatio": "9:16",
     "outputResolution": "1080x1920",
-    "active": true
+    "active": true,
+    "faceRegion": {
+      "top": 0.06,
+      "bottom": 0.21,
+      "left": 0.35,
+      "right": 0.58
+    }
   },
   {
     "id": "secret_agent_female",
@@ -149,7 +191,13 @@
     "duration": 5,
     "aspectRatio": "9:16",
     "outputResolution": "1080x1920",
-    "active": true
+    "active": true,
+    "faceRegion": {
+      "top": 0.04,
+      "bottom": 0.19,
+      "left": 0.35,
+      "right": 0.6
+    }
   },
   {
     "id": "fantasy_queen_female",
@@ -168,7 +216,13 @@
     "duration": 5,
     "aspectRatio": "9:16",
     "outputResolution": "1080x1920",
-    "active": true
+    "active": true,
+    "faceRegion": {
+      "top": 0.09,
+      "bottom": 0.26,
+      "left": 0.34,
+      "right": 0.6
+    }
   },
   {
     "id": "futuristic_warrior_female",
@@ -187,7 +241,13 @@
     "duration": 5,
     "aspectRatio": "9:16",
     "outputResolution": "1080x1920",
-    "active": true
+    "active": true,
+    "faceRegion": {
+      "top": 0.04,
+      "bottom": 0.21,
+      "left": 0.35,
+      "right": 0.6
+    }
   },
   {
     "id": "mythic_guardian_male",
@@ -206,7 +266,13 @@
     "duration": 5,
     "aspectRatio": "9:16",
     "outputResolution": "1080x1920",
-    "active": true
+    "active": true,
+    "faceRegion": {
+      "top": 0.04,
+      "bottom": 0.21,
+      "left": 0.34,
+      "right": 0.6
+    }
   },
   {
     "id": "mythic_guardian_female",
@@ -225,6 +291,12 @@
     "duration": 5,
     "aspectRatio": "9:16",
     "outputResolution": "1080x1920",
-    "active": true
+    "active": true,
+    "faceRegion": {
+      "top": 0.06,
+      "bottom": 0.23,
+      "left": 0.33,
+      "right": 0.6
+    }
   }
 ]
