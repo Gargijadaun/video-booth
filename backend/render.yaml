@@ -1,0 +1,32 @@
+services:
+  - type: web
+    name: holobox-video-booth-backend
+    runtime: node
+    plan: free
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /health
+    envVars:
+      - key: PORT
+        value: 4000
+      - key: PUBLIC_BASE_URL
+        sync: false
+      - key: MOBILE_APP_URL
+        sync: false
+      - key: CORS_ORIGIN
+        value: "*"
+      - key: VIDEO_PROVIDER
+        value: fal
+      - key: FAL_API_KEY
+        sync: false
+      - key: FAL_MODEL
+        value: fal-ai/wan-i2v
+      - key: SELFIE_TTL_MINUTES
+        value: 30
+      - key: VIDEO_TTL_MINUTES
+        value: 1440
+      - key: SESSION_TTL_MINUTES
+        value: 60
+      - key: MAX_UPLOAD_MB
+        value: 10

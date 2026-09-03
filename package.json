@@ -1,0 +1,14 @@
+{
+  "name": "holobox-video-booth",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "install:all": "npm install --prefix backend && npm install --prefix mobile && npm install --prefix holobox",
+    "dev": "concurrently -n backend,mobile,holobox -c blue,magenta,cyan \"npm run dev --prefix backend\" \"npm run dev --prefix mobile\" \"npm run dev --prefix holobox\"",
+    "build": "npm run build --prefix mobile && npm run build --prefix holobox",
+    "start": "npm run build && npm run start --prefix backend"
+  },
+  "devDependencies": {
+    "concurrently": "^9.0.1"
+  }
+}
