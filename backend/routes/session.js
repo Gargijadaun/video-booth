@@ -30,7 +30,13 @@ module.exports = function createSessionRouter(sessionStore) {
   router.get('/templates', (req, res) => {
     const templates = require('../templates/templates.json').filter((t) => t.active);
     // Strip prompt/negativePrompt from the public listing - no reason to ship them to the client.
-    const safe = templates.map(({ prompt, negativePrompt, ...rest }) => rest);
+    // Thumbnail paths in templates.json are relative (served by this backend's own
+    // /templates static route) - resolve them to absolute URLs here so a frontend
+    // deployed on a different origin (e.g. Vercel) can actually load the images.
+    const safe = templates.map(({ prompt, negativePrompt, thumbnail, ...rest }) => ({
+      ...rest,
+      thumbnail: /^https?:\/\//.test(thumbnail) ? thumbnail : `${config.publicBaseUrl}${thumbnail}`
+    }));
     res.json({ templates: safe });
   });
 
