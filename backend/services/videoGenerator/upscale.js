@@ -29,21 +29,29 @@ async function normalizeToDeliveryFormat(inputVideoBuffer) {
 
   await new Promise((resolve, reject) => {
     ffmpeg(tmpIn)
+      // Constrain the DECODER too, not just the encoder - a real AI-generated
+      // video (actual motion/detail) decodes far more expensively than the
+      // synthetic test clips this was first tuned against, and was still
+      // enough to OOM a 512MB Render free-tier dyno with only the encoder
+      // limited. ultrafast + no B-frames/lookahead/ref-frames minimizes both
+      // decode and encode peak memory at the cost of some compression
+      // efficiency, which doesn't matter for a 5s clip.
+      .inputOptions(['-threads 1'])
       .videoFilters([
         `scale=${TARGET_WIDTH}:${TARGET_HEIGHT}:force_original_aspect_ratio=increase`,
         `crop=${TARGET_WIDTH}:${TARGET_HEIGHT}`,
         `fps=${TARGET_FPS}`,
         'format=yuv420p'
       ])
-      // veryfast/threads 1/no lookahead trades a little encode efficiency for a
-      // much smaller peak memory footprint - needed to fit low-memory hosts
-      // (e.g. a 512MB free-tier dyno) encoding a full 1080x1920 stream.
       .outputOptions([
         '-c:v libx264',
-        '-preset veryfast',
-        '-crf 22',
+        '-preset ultrafast',
+        '-tune fastdecode',
+        '-crf 24',
         '-threads 1',
-        '-x264-params rc-lookahead=10:ref=1',
+        '-filter_threads 1',
+        '-x264-params rc-lookahead=0:ref=1:bframes=0:weightp=0:8x8dct=0',
+        '-max_muxing_queue_size 128',
         '-movflags +faststart',
         '-an'
       ])
