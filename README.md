@@ -91,7 +91,8 @@ Then point the HoloBox's kiosk browser at `http://<kiosk-ip>:4000/holobox`.
 
 | Variable | Purpose |
 |---|---|
-| `PORT`, `PUBLIC_BASE_URL`, `CORS_ORIGIN` | Server basics. `PUBLIC_BASE_URL` is baked into every QR code. |
+| `PORT`, `PUBLIC_BASE_URL`, `CORS_ORIGIN` | Server basics. `PUBLIC_BASE_URL` is baked into share-video QR codes and links. |
+| `MOBILE_APP_URL` | URL of the separately-deployed mobile app (e.g. Vercel). Baked into the HoloBox's join QR. Leave blank for same-origin/local setups. |
 | `VIDEO_PROVIDER` | `fal` \| `replicate` \| `huggingface` \| `mock` |
 | `FAL_API_KEY`, `FAL_MODEL` | fal.ai auth + model id |
 | `REPLICATE_API_TOKEN`, `REPLICATE_MODEL` | Replicate auth + model id |
@@ -101,6 +102,58 @@ Then point the HoloBox's kiosk browser at `http://<kiosk-ip>:4000/holobox`.
 
 API keys only ever live in `backend/.env` / server env - neither frontend ever
 sees them.
+
+## Production deployment (split hosting: Vercel + Render)
+
+Vercel serves static frontends, not long-running stateful servers (Socket.IO
+connections, local disk storage, multi-minute ffmpeg/AI polling jobs). So this
+app deploys as **three separate services**:
+
+| Service | Where | What |
+|---|---|---|
+| `holobox/` | Vercel | Static SPA, deployed at its own domain |
+| `mobile/` | Vercel | Static SPA, deployed at its own domain |
+| `backend/` | Render (or Railway/Fly/any Node host) | The stateful Express + Socket.IO + ffmpeg server |
+
+### 1. Backend on Render
+
+A Blueprint is already checked in at the repo root (`render.yaml`, pointing
+`rootDir: backend`). In the Render dashboard: **New +** -> **Blueprint** ->
+connect this GitHub repo -> Render detects `render.yaml` and creates the web
+service. Fill in the `sync: false` env vars it prompts for:
+
+- `FAL_API_KEY` - your fal.ai key
+- `PUBLIC_BASE_URL` - the Render service's own URL once assigned, e.g. `https://holobox-video-booth-backend.onrender.com` (redeploy after setting it)
+- `MOBILE_APP_URL` - the mobile app's Vercel URL (step 2)
+
+Render's free plan spins the service down after inactivity - the first
+request after idle will be slow (cold start) while it spins back up.
+
+### 2. Frontends on Vercel
+
+Each of `holobox/` and `mobile/` is its own Vercel project (`vercel --prod`
+from inside each directory, or connect the repo in the Vercel dashboard with
+that directory as the project root). Both need one env var pointing at the
+backend from step 1:
+
+```
+VITE_API_BASE_URL=https://holobox-video-booth-backend.onrender.com
+```
+
+Set it in the Vercel project's Settings -> Environment Variables, then
+redeploy (env vars are baked in at build time, so a redeploy is required
+after changing one). Without it, both apps fall back to same-origin calls,
+which only works when the backend serves them itself (the local/kiosk setup
+in "Running it" above).
+
+### 3. Wire it together
+
+Once both are deployed: put the mobile app's Vercel URL into the backend's
+`MOBILE_APP_URL` and the backend's own Render URL into `PUBLIC_BASE_URL`,
+redeploy the backend, and redeploy both frontends with `VITE_API_BASE_URL`
+set. The HoloBox's QR will then point guests at the Vercel-hosted mobile app,
+and both frontends will talk to the Render backend for everything else
+(templates, selfie upload, generation, share links, media playback).
 
 ## Notes on scope / pragmatic choices
 
