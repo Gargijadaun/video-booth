@@ -5,14 +5,14 @@
     "gender": "male",
     "description": "Become an original futuristic hero with a flowing cape and a radiant hero suit.",
     "thumbnail": "/templates/superhero_male.jpg",
-    "prompt": "Create a cinematic vertical video featuring the person from the reference image as an original futuristic superhero, wearing a premium original superhero suit and flowing cape. Preserve the person's exact facial identity and recognizable facial features. {{ACTION}} Plain solid white studio background, no scenery, no city, no environment whatsoever, isolated on white backdrop, professional studio lighting, cinematic lighting, realistic skin, realistic body proportions, shallow depth of field, premium movie-quality visuals, highly detailed costume, natural cape movement. Keep the person's face consistent throughout the entire video. No face distortion, no identity changes, no extra people, no background scenery.",
+    "prompt": "Create a cinematic vertical 5-second video using the person and costume from the reference image. Preserve the person's exact facial identity, facial structure, skin tone, hairline, and recognizable facial features throughout the entire video. Preserve the exact body proportions, height, head size, costume, accessories, and overall appearance from the reference image. The character remains standing in the SAME fixed position throughout the entire video. Perform ONLY the specified subtle stationary pose/action: {{ACTION}}. No walking, no stepping forward or backward, no running, no jumping, no dancing, no changing location, and no large body movements. Use a plain solid pure-white studio background with absolutely no scenery, environment, room, floor texture, objects, or background elements. Professional studio photography lighting, cinematic clean lighting, realistic skin texture, realistic body proportions, detailed original superhero costume, natural cape movement, photorealistic premium movie-quality visuals. Allow only subtle natural motion such as blinking, breathing, slight facial expression changes, minimal hair movement, and gentle cape movement. Keep the camera completely locked in a fixed position with stable framing. No camera cuts, no camera movement, no zoom, and no rotation. Maintain perfect facial identity consistency from the first frame to the last frame.",
     "actionVariants": [
-      "The character strikes a powerful heroic pose, cape billowing dramatically.",
-      "The character confidently walks toward the camera, cape flowing behind with each step.",
-      "The character turns dramatically to face the camera, energy glowing around the fists.",
-      "The character raises both arms in a triumphant power stance as the cape whips around them."
+      "The character holds a powerful heroic stance with both arms relaxed slightly away from the body while the cape moves subtly.",
+      "The character places one hand on the hip and maintains a confident heroic expression while the cape moves gently.",
+      "The character slowly raises one fist to chest level and holds a powerful superhero pose.",
+      "The character stands tall and slowly turns the head slightly toward the camera while maintaining a confident expression."
     ],
-    "negativePrompt": "face distortion, identity change, extra fingers, extra limbs, facial melting, duplicate people, sudden costume changes, camera cuts, warped body, unnatural movement, blurry, low quality, background, scenery, city, room, gradient background",
+    "negativePrompt": "walking, walk cycle, stepping, running, jumping, dancing, moving location, forward movement, backward movement, large body movement, camera movement, camera cuts, zoom, rotation, scene change, background change, scenery, environment, room, city, landscape, floor, duplicate person, extra person, face distortion, identity change, facial melting, face morphing, inconsistent face, changing facial features, head size change, body deformation, warped body, extra arms, extra legs, extra fingers, missing fingers, distorted hands, costume change, costume deformation, blurry face, flickering, unstable lighting, low quality",
     "duration": 5,
     "aspectRatio": "9:16",
     "outputResolution": "1080x1920",
@@ -30,14 +30,14 @@
     "gender": "male",
     "description": "A rugged tactical hero ready for action, shown against a clean studio backdrop.",
     "thumbnail": "/templates/action_hero_male.jpg",
-    "prompt": "Create a cinematic vertical video featuring the person from the reference image as a rugged action hero in a tactical outfit. Preserve the person's exact facial identity and recognizable facial features. {{ACTION}} Plain solid white studio background, no scenery, no city, no environment whatsoever, isolated on white backdrop, professional studio lighting, cinematic lighting, realistic skin, realistic body proportions, shallow depth of field, premium movie-quality visuals, highly detailed costume. Keep the person's face consistent throughout the entire video. No face distortion, no identity changes, no extra people, no background scenery.",
+    "prompt": "Create a cinematic vertical 5-second video using the person and costume from the reference image as a rugged tactical action hero. Preserve the person's exact facial identity, facial structure, skin tone, hairline, and recognizable facial features throughout the entire video. Preserve the exact body proportions, height, head size, tactical outfit, accessories, and overall appearance from the reference image. The character remains standing in the SAME fixed position throughout the entire video. Perform ONLY the specified subtle stationary pose/action: {{ACTION}}. No walking, no stepping forward or backward, no running, no jumping, no dancing, no changing location, and no large body movements. Plain solid pure-white studio background, absolutely no scenery, city, room, environment, objects, or background elements. Professional studio photography lighting, cinematic clean lighting, realistic skin texture, realistic body proportions, detailed tactical clothing, photorealistic premium movie-quality visuals. Allow only subtle natural motion such as blinking, breathing, slight facial expression changes, and minimal clothing movement. Keep the camera completely locked in a fixed position with stable framing. No camera cuts, camera movement, zoom, rotation, or reframing. Maintain perfect facial identity consistency from the first frame to the last frame.",
     "actionVariants": [
-      "The character throws a powerful punch toward the camera with intense focus.",
-      "The character walks forward with confident, determined strides.",
-      "The character strikes a ready combat stance, muscles tensed.",
-      "The character turns sharply with sharp, alert focus."
+      "The character holds a strong tactical stance with both feet firmly planted and an intense focused expression.",
+      "The character slowly raises one fist into a ready position and holds the pose.",
+      "The character crosses the arms and maintains a confident, serious expression.",
+      "The character slightly turns the upper body while keeping both feet firmly planted in the same position."
     ],
-    "negativePrompt": "face distortion, identity change, extra fingers, extra limbs, facial melting, duplicate people, sudden costume changes, camera cuts, warped body, unnatural movement, blurry, low quality, background, scenery, city, room, gradient background",
+    "negativePrompt": "walking, walk cycle, stepping, running, jumping, dancing, moving location, forward movement, backward movement, large body movement, camera movement, camera cuts, zoom, rotation, scene change, background change, scenery, environment, room, city, landscape, floor, duplicate person, extra person, face distortion, identity change, facial melting, face morphing, inconsistent face, changing facial features, head size change, body deformation, warped body, extra arms, extra legs, extra fingers, missing fingers, distorted hands, costume change, costume deformation, blurry face, flickering, unstable lighting, low quality",
     "duration": 5,
     "aspectRatio": "9:16",
     "outputResolution": "1080x1920",
@@ -55,14 +55,14 @@
     "gender": "male",
     "description": "An elegant black suit and a cool spy-thriller attitude, shown against a clean studio backdrop.",
     "thumbnail": "/templates/secret_agent_male.jpg",
-    "prompt": "Create a cinematic vertical video featuring the person from the reference image as a male secret agent wearing an elegant tailored black suit. Preserve the person's exact facial identity and recognizable facial features. {{ACTION}} Plain solid white studio background, no scenery, no city, no environment whatsoever, isolated on white backdrop, professional studio lighting, cinematic lighting, realistic skin, realistic body proportions, shallow depth of field, premium movie-quality visuals, highly detailed costume. Keep the person's face consistent throughout the entire video. No face distortion, no identity changes, no extra people, no background scenery.",
+    "prompt": "Create a cinematic vertical 5-second video using the person and costume from the reference image as an elegant male secret agent. Preserve the person's exact facial identity, facial structure, skin tone, hairline, and recognizable facial features throughout the entire video. Preserve the exact body proportions, height, head size, tailored black suit, accessories, and overall appearance from the reference image. The character remains standing in the SAME fixed position throughout the entire video. Perform ONLY the specified subtle stationary pose/action: {{ACTION}}. No walking, no stepping, no running, no jumping, no dancing, no changing location, and no large body movements. Plain solid pure-white studio background with absolutely no scenery, city, room, office, environment, objects, or background elements. Professional studio lighting, cinematic clean lighting, realistic skin texture, realistic fabric, premium photorealistic quality. Allow only subtle natural motion such as blinking, breathing, slight facial expression changes, and minimal suit movement. Keep the camera completely locked in a fixed position with stable framing. No camera cuts, movement, zoom, rotation, or reframing. Maintain perfect facial identity consistency throughout the video.",
     "actionVariants": [
-      "The character adjusts their jacket cuff with a cool, confident smirk.",
-      "The character walks forward with smooth, deliberate steps.",
-      "The character turns sharply on their heel, coat swirling elegantly.",
-      "The character stands with arms crossed, exuding calm confidence."
+      "The character stands confidently and subtly adjusts one jacket cuff while maintaining a cool expression.",
+      "The character slowly straightens the jacket while keeping both feet firmly planted and holds the pose.",
+      "The character stands with arms crossed and maintains a subtle confident facial expression.",
+      "The character places one hand inside the jacket and holds a calm, sophisticated spy pose."
     ],
-    "negativePrompt": "face distortion, identity change, extra fingers, extra limbs, facial melting, duplicate people, sudden costume changes, camera cuts, warped body, unnatural movement, blurry, low quality, background, scenery, city, room, gradient background",
+    "negativePrompt": "walking, walk cycle, stepping, running, jumping, dancing, moving location, forward movement, backward movement, large body movement, camera movement, camera cuts, zoom, rotation, scene change, background change, scenery, environment, room, city, office, duplicate person, extra person, face distortion, identity change, facial melting, face morphing, inconsistent face, changing facial features, head size change, body deformation, warped body, extra arms, extra legs, extra fingers, missing fingers, distorted hands, costume change, costume deformation, blurry face, flickering, unstable lighting, low quality",
     "duration": 5,
     "aspectRatio": "9:16",
     "outputResolution": "1080x1920",
@@ -80,14 +80,14 @@
     "gender": "male",
     "description": "Advanced original sci-fi armor, shown against a clean studio backdrop.",
     "thumbnail": "/templates/futuristic_warrior_male.jpg",
-    "prompt": "Create a cinematic vertical video featuring the person from the reference image as a male warrior wearing original advanced sci-fi armor. Preserve the person's exact facial identity and recognizable facial features. {{ACTION}} Plain solid white studio background, no scenery, no city, no environment whatsoever, isolated on white backdrop, professional studio lighting, cinematic lighting, realistic skin, realistic body proportions, shallow depth of field, premium movie-quality visuals, highly detailed armor. Keep the person's face consistent throughout the entire video. No face distortion, no identity changes, no extra people, no background scenery.",
+    "prompt": "Create a cinematic vertical 5-second video using the person and costume from the reference image as a male futuristic warrior wearing original advanced sci-fi armor. Preserve the person's exact facial identity, facial structure, skin tone, hairline, and recognizable facial features throughout the entire video. Preserve the exact body proportions, height, head size, armor design, accessories, and overall appearance from the reference image. The character remains standing in the SAME fixed position throughout the entire video. Perform ONLY the specified subtle stationary pose/action: {{ACTION}}. No walking, no stepping, no running, no jumping, no dancing, no changing location, and no large body movements. Plain solid pure-white studio background with absolutely no scenery, environment, objects, room, or background elements. Professional studio lighting, cinematic clean lighting, realistic skin, detailed armor, subtle armor light effects, photorealistic premium visuals. Allow only subtle natural motion such as blinking, breathing, slight facial expression changes, and minimal armor light pulsing. Keep the camera completely locked in a fixed position with stable framing. No camera cuts, camera movement, zoom, rotation, or reframing. Maintain perfect facial identity consistency throughout the entire video.",
     "actionVariants": [
-      "The character raises a glowing energy weapon into a battle-ready stance.",
-      "The character walks forward with powerful, armored strides.",
-      "The character strikes a dynamic combat pose, armor plates shifting.",
-      "The character turns to face the camera as the armor's lights pulse."
+      "The character holds a powerful battle-ready stance with the energy weapon positioned beside the body.",
+      "The character slowly raises the energy weapon into a defensive position and holds completely still.",
+      "The character stands firmly with both arms positioned in a strong armored warrior stance while the armor lights pulse subtly.",
+      "The character slightly turns the head toward the camera while maintaining a powerful stationary warrior pose."
     ],
-    "negativePrompt": "face distortion, identity change, extra fingers, extra limbs, facial melting, duplicate people, sudden costume changes, camera cuts, warped body, unnatural movement, blurry, low quality, background, scenery, city, room, gradient background",
+    "negativePrompt": "walking, walk cycle, stepping, running, jumping, dancing, moving location, forward movement, backward movement, large body movement, camera movement, camera cuts, zoom, rotation, scene change, background change, scenery, environment, room, city, landscape, duplicate person, extra person, face distortion, identity change, facial melting, face morphing, inconsistent face, changing facial features, head size change, body deformation, warped body, extra arms, extra legs, extra fingers, missing fingers, distorted hands, weapon deformation, costume change, armor transformation, blurry face, flickering, unstable lighting, low quality",
     "duration": 5,
     "aspectRatio": "9:16",
     "outputResolution": "1080x1920",
@@ -105,14 +105,14 @@
     "gender": "male",
     "description": "An ornate royal robe and a dignified, commanding presence, shown against a clean studio backdrop.",
     "thumbnail": "/templates/royal_king_male.jpg",
-    "prompt": "Create a cinematic vertical video featuring the person from the reference image as a royal king wearing an ornate royal robe with fine gold embroidery. Preserve the person's exact facial identity and facial structure. {{ACTION}} Plain solid white studio background, no scenery, no palace, no environment whatsoever, isolated on white backdrop, professional studio lighting, cinematic lighting, realistic skin, realistic fabric movement, shallow depth of field, premium movie-quality visuals, highly detailed costume. Keep the person's face consistent throughout the entire video. No face distortion, no identity changes, no extra people, no background scenery.",
+    "prompt": "Create a cinematic vertical 5-second video using the person and costume from the reference image as a dignified royal king wearing an ornate royal robe with fine gold embroidery. Preserve the person's exact facial identity, facial structure, skin tone, hairline, and recognizable facial features throughout the entire video. Preserve the exact body proportions, height, head size, robe, accessories, and overall appearance from the reference image. The character remains standing in the SAME fixed position throughout the entire video. Perform ONLY the specified subtle stationary pose/action: {{ACTION}}. No walking, no stepping, no running, no jumping, no dancing, no changing location, and no large body movements. Plain solid pure-white studio background with absolutely no palace, scenery, room, environment, objects, or background elements. Professional studio photography lighting, elegant cinematic lighting, realistic skin, detailed royal fabric, subtle fabric movement, premium photorealistic visuals. Allow only subtle natural motion such as blinking, breathing, slight facial expression changes, and gentle robe movement. Keep the camera locked in a fixed position with stable framing. No camera cuts, camera movement, zoom, rotation, or reframing. Maintain perfect facial identity consistency throughout the video.",
     "actionVariants": [
-      "The character raises a hand in a regal, commanding gesture.",
-      "The character walks forward slowly with dignified, confident steps.",
-      "The character stands tall with arms folded in quiet authority.",
-      "The character turns gracefully, the robe flowing with the movement."
+      "The character stands tall in a regal pose and slowly raises one hand in a dignified royal gesture.",
+      "The character holds a commanding stance with one hand resting naturally while the robe moves subtly.",
+      "The character stands with arms folded and maintains a calm, authoritative expression.",
+      "The character slowly adjusts one sleeve and then holds a dignified royal pose."
     ],
-    "negativePrompt": "face distortion, identity change, extra fingers, extra limbs, facial melting, duplicate people, sudden costume changes, camera cuts, warped body, unnatural movement, blurry, low quality, background, scenery, palace, room, gradient background",
+    "negativePrompt": "walking, walk cycle, stepping, running, jumping, dancing, moving location, forward movement, backward movement, large body movement, camera movement, camera cuts, zoom, rotation, scene change, background change, scenery, palace, room, environment, duplicate person, extra person, face distortion, identity change, facial melting, face morphing, inconsistent face, changing facial features, head size change, body deformation, warped body, extra arms, extra legs, extra fingers, missing fingers, distorted hands, costume change, robe transformation, blurry face, flickering, unstable lighting, low quality",
     "duration": 5,
     "aspectRatio": "9:16",
     "outputResolution": "1080x1920",
@@ -125,19 +125,44 @@
     }
   },
   {
+    "id": "mythic_guardian_male",
+    "name": "Mythic Guardian",
+    "gender": "male",
+    "description": "A divine original hero in radiant red and gold armor, shown against a clean studio backdrop.",
+    "thumbnail": "/templates/mythic_guardian_male.jpg",
+    "prompt": "Create a cinematic vertical 5-second video using the person and costume from the reference image as an original divine mythical guardian hero wearing a radiant red and gold original superhero suit with a glowing chest emblem and flowing cape. Preserve the person's exact facial identity, facial structure, skin tone, hairline, and recognizable facial features throughout the entire video. Preserve the exact body proportions, height, head size, costume, cape, accessories, and overall appearance from the reference image. The character remains standing in the SAME fixed position throughout the entire video. Perform ONLY the specified subtle stationary pose/action: {{ACTION}}. No walking, no stepping, no running, no jumping, no dancing, no changing location, and no large body movements. Plain solid pure-white studio background with absolutely no scenery, environment, objects, room, or background elements. Professional studio lighting, subtle golden radiant lighting, realistic skin, detailed original costume, gentle cape movement, subtle golden glow, photorealistic premium movie-quality visuals. Allow only subtle natural motion such as blinking, breathing, slight facial expression changes, gentle cape movement, and subtle golden particles. Keep the camera completely locked in a fixed position with stable framing. No camera cuts, camera movement, zoom, rotation, or reframing. Maintain perfect facial identity consistency throughout the entire video.",
+    "actionVariants": [
+      "The character holds a powerful divine stance with both arms slightly extended while the cape moves gently.",
+      "The character slowly raises one hand as a subtle golden aura glows around the body.",
+      "The character stands firmly with fists near the sides while the chest emblem emits a gentle radiant glow.",
+      "The character slightly raises the chin and holds a powerful guardian pose as golden particles move subtly."
+    ],
+    "negativePrompt": "walking, walk cycle, stepping, running, jumping, dancing, moving location, forward movement, backward movement, large body movement, camera movement, camera cuts, zoom, rotation, scene change, background change, scenery, environment, room, city, duplicate person, extra person, face distortion, identity change, facial melting, face morphing, inconsistent face, changing facial features, head size change, body deformation, warped body, extra arms, extra legs, extra fingers, missing fingers, distorted hands, costume change, armor transformation, cape deformation, blurry face, flickering, unstable lighting, low quality",
+    "duration": 5,
+    "aspectRatio": "9:16",
+    "outputResolution": "1080x1920",
+    "active": true,
+    "faceRegion": {
+      "top": 0.04,
+      "bottom": 0.21,
+      "left": 0.34,
+      "right": 0.6
+    }
+  },
+  {
     "id": "superhero_female",
     "name": "Futuristic Superhero",
     "gender": "female",
     "description": "Become an original futuristic heroine with a flowing cape and a radiant hero suit.",
     "thumbnail": "/templates/superhero_female.jpg",
-    "prompt": "Create a cinematic vertical video featuring the person from the reference image as an original futuristic superheroine, wearing a premium original superhero suit and flowing cape. Preserve the person's exact facial identity and recognizable facial features. {{ACTION}} Plain solid white studio background, no scenery, no city, no environment whatsoever, isolated on white backdrop, professional studio lighting, cinematic lighting, realistic skin, realistic body proportions, shallow depth of field, premium movie-quality visuals, highly detailed costume, natural cape and hair movement. Keep the person's face consistent throughout the entire video. No face distortion, no identity changes, no extra people, no background scenery.",
+    "prompt": "Create a cinematic vertical 5-second video using the person and costume from the reference image as an original futuristic superheroine wearing a premium original superhero suit and flowing cape. Preserve the person's exact facial identity, facial structure, skin tone, hairline, and recognizable facial features throughout the entire video. Preserve the exact body proportions, height, head size, costume, cape, accessories, and overall appearance from the reference image. The character remains standing in the SAME fixed position throughout the entire video. Perform ONLY the specified subtle stationary pose/action: {{ACTION}}. No walking, no stepping, no running, no jumping, no dancing, no changing location, and no large body movements. Plain solid pure-white studio background with absolutely no scenery, environment, room, floor texture, objects, or background elements. Professional studio photography lighting, cinematic clean lighting, realistic skin, realistic body proportions, detailed original superhero costume, natural cape and subtle hair movement, photorealistic premium movie-quality visuals. Allow only subtle natural motion such as blinking, breathing, slight facial expression changes, minimal hair movement, and gentle cape movement. Keep the camera completely locked in a fixed position with stable framing. No camera cuts, camera movement, zoom, rotation, or reframing. Maintain perfect facial identity consistency throughout the entire video.",
     "actionVariants": [
-      "The character strikes a powerful heroic pose, cape billowing dramatically.",
-      "The character confidently walks toward the camera, cape flowing behind with each step.",
-      "The character turns dramatically to face the camera, energy glowing around the fists.",
-      "The character raises both arms in a triumphant power stance as the cape whips around them."
+      "The character holds a confident heroic stance with the cape moving gently behind her.",
+      "The character places one hand on the hip and maintains a confident superhero expression.",
+      "The character slowly raises one fist to chest level and holds a powerful heroic pose.",
+      "The character remains stationary and slightly turns her head toward the camera while maintaining a confident expression."
     ],
-    "negativePrompt": "face distortion, identity change, extra fingers, extra limbs, facial melting, duplicate people, sudden costume changes, camera cuts, warped body, unnatural movement, blurry, low quality, background, scenery, city, room, gradient background",
+    "negativePrompt": "walking, walk cycle, stepping, running, jumping, dancing, moving location, forward movement, backward movement, large body movement, camera movement, camera cuts, zoom, rotation, scene change, background change, scenery, environment, room, city, landscape, duplicate person, extra person, face distortion, identity change, facial melting, face morphing, inconsistent face, changing facial features, head size change, body deformation, warped body, extra arms, extra legs, extra fingers, missing fingers, distorted hands, costume change, costume deformation, blurry face, flickering, unstable lighting, low quality",
     "duration": 5,
     "aspectRatio": "9:16",
     "outputResolution": "1080x1920",
@@ -155,14 +180,14 @@
     "gender": "female",
     "description": "A confident tactical heroine ready for action, shown against a clean studio backdrop.",
     "thumbnail": "/templates/action_heroine_female.jpg",
-    "prompt": "Create a cinematic vertical video featuring the person from the reference image as an athletic action heroine in a tactical outfit. Preserve the person's exact facial identity and recognizable facial features. {{ACTION}} Plain solid white studio background, no scenery, no city, no environment whatsoever, isolated on white backdrop, professional studio lighting, cinematic lighting, realistic skin, realistic body proportions, shallow depth of field, premium movie-quality visuals, highly detailed costume. Keep the person's face consistent throughout the entire video. No face distortion, no identity changes, no extra people, no background scenery.",
+    "prompt": "Create a cinematic vertical 5-second video using the person and costume from the reference image as an athletic tactical action heroine. Preserve the person's exact facial identity, facial structure, skin tone, hairline, and recognizable facial features throughout the entire video. Preserve the exact body proportions, height, head size, tactical outfit, accessories, and overall appearance from the reference image. The character remains standing in the SAME fixed position throughout the entire video. Perform ONLY the specified subtle stationary pose/action: {{ACTION}}. No walking, no stepping, no running, no jumping, no dancing, no changing location, and no large body movements. Plain solid pure-white studio background with absolutely no scenery, city, room, environment, objects, or background elements. Professional studio lighting, cinematic clean lighting, realistic skin texture, realistic body proportions, detailed tactical clothing, photorealistic premium movie-quality visuals. Allow only subtle natural motion such as blinking, breathing, slight facial expression changes, and minimal clothing movement. Keep the camera completely locked in a fixed position with stable framing. No camera cuts, camera movement, zoom, rotation, or reframing. Maintain perfect facial identity consistency throughout the entire video.",
     "actionVariants": [
-      "The character throws a powerful punch toward the camera with intense focus.",
-      "The character walks forward with confident, determined strides.",
-      "The character strikes a ready combat stance, muscles tensed.",
-      "The character turns sharply with sharp, alert focus."
+      "The character holds a strong tactical stance with both feet planted firmly and a focused expression.",
+      "The character slowly raises one fist into a ready combat position and holds the pose.",
+      "The character crosses her arms and maintains a confident, determined expression.",
+      "The character slightly turns her upper body while keeping both feet firmly planted in the same position."
     ],
-    "negativePrompt": "face distortion, identity change, extra fingers, extra limbs, facial melting, duplicate people, sudden costume changes, camera cuts, warped body, unnatural movement, blurry, low quality, background, scenery, city, room, gradient background",
+    "negativePrompt": "walking, walk cycle, stepping, running, jumping, dancing, moving location, forward movement, backward movement, large body movement, camera movement, camera cuts, zoom, rotation, scene change, background change, scenery, environment, room, city, duplicate person, extra person, face distortion, identity change, facial melting, face morphing, inconsistent face, changing facial features, head size change, body deformation, warped body, extra arms, extra legs, extra fingers, missing fingers, distorted hands, costume change, costume deformation, blurry face, flickering, unstable lighting, low quality",
     "duration": 5,
     "aspectRatio": "9:16",
     "outputResolution": "1080x1920",
@@ -180,14 +205,14 @@
     "gender": "female",
     "description": "An elegant black outfit and a cool spy-thriller attitude, shown against a clean studio backdrop.",
     "thumbnail": "/templates/secret_agent_female.jpg",
-    "prompt": "Create a cinematic vertical video featuring the person from the reference image as a female secret agent wearing an elegant tailored black outfit. Preserve the person's exact facial identity and recognizable facial features. {{ACTION}} Plain solid white studio background, no scenery, no city, no environment whatsoever, isolated on white backdrop, professional studio lighting, cinematic lighting, realistic skin, realistic body proportions, shallow depth of field, premium movie-quality visuals, highly detailed costume. Keep the person's face consistent throughout the entire video. No face distortion, no identity changes, no extra people, no background scenery.",
+    "prompt": "Create a cinematic vertical 5-second video using the person and costume from the reference image as an elegant female secret agent wearing a tailored black outfit. Preserve the person's exact facial identity, facial structure, skin tone, hairline, and recognizable facial features throughout the entire video. Preserve the exact body proportions, height, head size, outfit, accessories, and overall appearance from the reference image. The character remains standing in the SAME fixed position throughout the entire video. Perform ONLY the specified subtle stationary pose/action: {{ACTION}}. No walking, no stepping, no running, no jumping, no dancing, no changing location, and no large body movements. Plain solid pure-white studio background with absolutely no scenery, city, room, office, environment, objects, or background elements. Professional studio lighting, cinematic clean lighting, realistic skin texture, realistic fabric, premium photorealistic visuals. Allow only subtle natural motion such as blinking, breathing, slight facial expression changes, and minimal clothing movement. Keep the camera completely locked in a fixed position with stable framing. No camera cuts, camera movement, zoom, rotation, or reframing. Maintain perfect facial identity consistency throughout the entire video.",
     "actionVariants": [
-      "The character adjusts their jacket cuff with a cool, confident smirk.",
-      "The character walks forward with smooth, deliberate steps.",
-      "The character turns sharply on their heel, coat swirling elegantly.",
-      "The character stands with arms crossed, exuding calm confidence."
+      "The character remains stationary and subtly adjusts one jacket cuff while maintaining a cool confident expression.",
+      "The character slowly straightens her jacket and holds an elegant spy pose.",
+      "The character stands with arms crossed and gives a subtle confident expression.",
+      "The character places one hand near the jacket and holds a sophisticated, composed pose."
     ],
-    "negativePrompt": "face distortion, identity change, extra fingers, extra limbs, facial melting, duplicate people, sudden costume changes, camera cuts, warped body, unnatural movement, blurry, low quality, background, scenery, city, room, gradient background",
+    "negativePrompt": "walking, walk cycle, stepping, running, jumping, dancing, moving location, forward movement, backward movement, large body movement, camera movement, camera cuts, zoom, rotation, scene change, background change, scenery, environment, room, city, office, duplicate person, extra person, face distortion, identity change, facial melting, face morphing, inconsistent face, changing facial features, head size change, body deformation, warped body, extra arms, extra legs, extra fingers, missing fingers, distorted hands, costume change, costume deformation, blurry face, flickering, unstable lighting, low quality",
     "duration": 5,
     "aspectRatio": "9:16",
     "outputResolution": "1080x1920",
@@ -205,14 +230,14 @@
     "gender": "female",
     "description": "An elegant royal gown and soft magical energy, shown against a clean studio backdrop.",
     "thumbnail": "/templates/fantasy_queen_female.jpg",
-    "prompt": "Create a cinematic vertical video featuring the person from the reference image as an elegant fantasy queen wearing a magnificent royal gown. Preserve the person's exact facial identity and facial structure. {{ACTION}} Plain solid white studio background, no scenery, no palace, no environment whatsoever, isolated on white backdrop, professional studio lighting, soft magical lighting, realistic skin, realistic fabric movement, shallow depth of field, premium movie-quality visuals, highly detailed costume. Keep the person's face consistent throughout the entire video. No face distortion, no identity changes, no extra people, no background scenery.",
+    "prompt": "Create a cinematic vertical 5-second video using the person and costume from the reference image as an elegant fantasy queen wearing a magnificent original royal gown. Preserve the person's exact facial identity, facial structure, skin tone, hairline, and recognizable facial features throughout the entire video. Preserve the exact body proportions, height, head size, gown, accessories, and overall appearance from the reference image. The character remains standing in the SAME fixed position throughout the entire video. Perform ONLY the specified subtle stationary pose/action: {{ACTION}}. No walking, no stepping, no running, no jumping, no dancing, no changing location, and no large body movements. Plain solid pure-white studio background with absolutely no palace, scenery, room, environment, objects, or background elements. Professional studio photography lighting, soft cinematic lighting, realistic skin, detailed royal fabric, subtle gown movement, gentle magical glow, photorealistic premium visuals. Allow only subtle natural motion such as blinking, breathing, slight facial expression changes, gentle fabric movement, and subtle magical particles. Keep the camera completely locked in a fixed position with stable framing. No camera cuts, camera movement, zoom, rotation, or reframing. Maintain perfect facial identity consistency throughout the entire video.",
     "actionVariants": [
-      "The character raises a hand as soft magical light swirls around her fingers.",
-      "The character walks forward gracefully, the gown flowing elegantly.",
-      "The character turns slowly as glowing magical particles drift around her.",
-      "The character stands elegantly with arms extended in a serene pose."
+      "The character stands elegantly and slowly raises one hand as soft magical light surrounds her fingers.",
+      "The character holds a graceful royal pose with both hands positioned elegantly while the gown moves subtly.",
+      "The character slowly extends one arm outward and holds a serene queen pose.",
+      "The character remains stationary while gently turning her head and maintaining a calm regal expression."
     ],
-    "negativePrompt": "face distortion, identity change, extra fingers, extra limbs, facial melting, duplicate people, sudden costume changes, camera cuts, warped body, unnatural movement, blurry, low quality, background, scenery, palace, room, gradient background",
+    "negativePrompt": "walking, walk cycle, stepping, running, jumping, dancing, moving location, forward movement, backward movement, large body movement, camera movement, camera cuts, zoom, rotation, scene change, background change, scenery, palace, room, environment, duplicate person, extra person, face distortion, identity change, facial melting, face morphing, inconsistent face, changing facial features, head size change, body deformation, warped body, extra arms, extra legs, extra fingers, missing fingers, distorted hands, costume change, gown transformation, blurry face, flickering, unstable lighting, low quality",
     "duration": 5,
     "aspectRatio": "9:16",
     "outputResolution": "1080x1920",
@@ -230,14 +255,14 @@
     "gender": "female",
     "description": "Advanced original sci-fi armor, shown against a clean studio backdrop.",
     "thumbnail": "/templates/futuristic_warrior_female.jpg",
-    "prompt": "Create a cinematic vertical video featuring the person from the reference image as a female warrior wearing original advanced sci-fi armor. Preserve the person's exact facial identity and recognizable facial features. {{ACTION}} Plain solid white studio background, no scenery, no city, no environment whatsoever, isolated on white backdrop, professional studio lighting, cinematic lighting, realistic skin, realistic body proportions, shallow depth of field, premium movie-quality visuals, highly detailed armor. Keep the person's face consistent throughout the entire video. No face distortion, no identity changes, no extra people, no background scenery.",
+    "prompt": "Create a cinematic vertical 5-second video using the person and costume from the reference image as a female futuristic warrior wearing original advanced sci-fi armor. Preserve the person's exact facial identity, facial structure, skin tone, hairline, and recognizable facial features throughout the entire video. Preserve the exact body proportions, height, head size, armor design, accessories, and overall appearance from the reference image. The character remains standing in the SAME fixed position throughout the entire video. Perform ONLY the specified subtle stationary pose/action: {{ACTION}}. No walking, no stepping, no running, no jumping, no dancing, no changing location, and no large body movements. Plain solid pure-white studio background with absolutely no scenery, environment, room, objects, or background elements. Professional studio lighting, cinematic clean lighting, realistic skin, detailed armor, subtle armor light effects, photorealistic premium visuals. Allow only subtle natural motion such as blinking, breathing, slight facial expression changes, and minimal armor light pulsing. Keep the camera completely locked in a fixed position with stable framing. No camera cuts, camera movement, zoom, rotation, or reframing. Maintain perfect facial identity consistency throughout the entire video.",
     "actionVariants": [
-      "The character raises a glowing energy weapon into a battle-ready stance.",
-      "The character walks forward with powerful, armored strides.",
-      "The character strikes a dynamic combat pose, armor plates shifting.",
-      "The character turns to face the camera as the armor's lights pulse."
+      "The character holds a strong stationary battle-ready stance with the energy weapon positioned beside her.",
+      "The character slowly raises the energy weapon into a defensive position and holds the pose.",
+      "The character stands firmly with both arms positioned in a powerful armored warrior stance while the armor lights pulse subtly.",
+      "The character slightly turns her head toward the camera while maintaining a powerful stationary warrior pose."
     ],
-    "negativePrompt": "face distortion, identity change, extra fingers, extra limbs, facial melting, duplicate people, sudden costume changes, camera cuts, warped body, unnatural movement, blurry, low quality, background, scenery, city, room, gradient background",
+    "negativePrompt": "walking, walk cycle, stepping, running, jumping, dancing, moving location, forward movement, backward movement, large body movement, camera movement, camera cuts, zoom, rotation, scene change, background change, scenery, environment, room, city, duplicate person, extra person, face distortion, identity change, facial melting, face morphing, inconsistent face, changing facial features, head size change, body deformation, warped body, extra arms, extra legs, extra fingers, missing fingers, distorted hands, weapon deformation, costume change, armor transformation, blurry face, flickering, unstable lighting, low quality",
     "duration": 5,
     "aspectRatio": "9:16",
     "outputResolution": "1080x1920",
@@ -250,44 +275,19 @@
     }
   },
   {
-    "id": "mythic_guardian_male",
-    "name": "Mythic Guardian",
-    "gender": "male",
-    "description": "A divine original hero in radiant red and gold armor, shown against a clean studio backdrop.",
-    "thumbnail": "/templates/mythic_guardian_male.jpg",
-    "prompt": "Create a cinematic vertical video featuring the person from the reference image as an original divine mythical guardian hero, wearing a radiant red and gold original superhero suit with a glowing chest emblem and flowing cape. Preserve the person's exact facial identity and recognizable facial features. {{ACTION}} Plain solid white studio background, no scenery, no environment whatsoever, isolated on white backdrop, professional studio lighting, golden radiant glow, realistic skin, realistic body proportions, shallow depth of field, premium movie-quality visuals, highly detailed costume. Keep the person's face consistent throughout the entire video. No face distortion, no identity changes, no extra people, no background scenery.",
-    "actionVariants": [
-      "The character raises both arms as a radiant golden aura surges around them.",
-      "The character walks forward with powerful, confident strides, the cape flowing.",
-      "The character strikes a divine power stance as golden light pulses from the chest emblem.",
-      "The character turns dramatically as glowing golden particles swirl around them."
-    ],
-    "negativePrompt": "face distortion, identity change, extra fingers, extra limbs, facial melting, duplicate people, sudden costume changes, camera cuts, warped body, unnatural movement, blurry, low quality, background, scenery, room, gradient background",
-    "duration": 5,
-    "aspectRatio": "9:16",
-    "outputResolution": "1080x1920",
-    "active": true,
-    "faceRegion": {
-      "top": 0.04,
-      "bottom": 0.21,
-      "left": 0.34,
-      "right": 0.6
-    }
-  },
-  {
     "id": "mythic_guardian_female",
     "name": "Mythic Guardian",
     "gender": "female",
     "description": "A divine original heroine in radiant red and gold armor, shown against a clean studio backdrop.",
     "thumbnail": "/templates/mythic_guardian_female.jpg",
-    "prompt": "Create a cinematic vertical video featuring the person from the reference image as an original divine mythical guardian heroine, wearing a radiant red and gold original superhero suit with a glowing chest emblem and flowing cape. Preserve the person's exact facial identity and recognizable facial features. {{ACTION}} Plain solid white studio background, no scenery, no environment whatsoever, isolated on white backdrop, professional studio lighting, golden radiant glow, realistic skin, realistic body proportions, shallow depth of field, premium movie-quality visuals, highly detailed costume. Keep the person's face consistent throughout the entire video. No face distortion, no identity changes, no extra people, no background scenery.",
+    "prompt": "Create a cinematic vertical 5-second video using the person and costume from the reference image as an original divine mythical guardian heroine wearing a radiant red and gold original superhero suit with a glowing chest emblem and flowing cape. Preserve the person's exact facial identity, facial structure, skin tone, hairline, and recognizable facial features throughout the entire video. Preserve the exact body proportions, height, head size, costume, cape, accessories, and overall appearance from the reference image. The character remains standing in the SAME fixed position throughout the entire video. Perform ONLY the specified subtle stationary pose/action: {{ACTION}}. No walking, no stepping, no running, no jumping, no dancing, no changing location, and no large body movements. Plain solid pure-white studio background with absolutely no scenery, environment, room, objects, or background elements. Professional studio lighting, subtle golden radiant lighting, realistic skin, detailed original costume, gentle cape movement, subtle golden glow, photorealistic premium movie-quality visuals. Allow only subtle natural motion such as blinking, breathing, slight facial expression changes, gentle cape movement, and subtle golden particles. Keep the camera completely locked in a fixed position with stable framing. No camera cuts, camera movement, zoom, rotation, or reframing. Maintain perfect facial identity consistency throughout the entire video.",
     "actionVariants": [
-      "The character raises both arms as a radiant golden aura surges around them.",
-      "The character walks forward with powerful, confident strides, the cape flowing.",
-      "The character strikes a divine power stance as golden light pulses from the chest emblem.",
-      "The character turns dramatically as glowing golden particles swirl around them."
+      "The character holds a powerful divine stance with both arms slightly extended while the cape moves gently.",
+      "The character slowly raises one hand as a subtle golden aura surrounds her.",
+      "The character stands firmly while the glowing chest emblem pulses gently with radiant golden light.",
+      "The character slightly raises her chin and holds a powerful guardian pose as subtle golden particles move around her."
     ],
-    "negativePrompt": "face distortion, identity change, extra fingers, extra limbs, facial melting, duplicate people, sudden costume changes, camera cuts, warped body, unnatural movement, blurry, low quality, background, scenery, room, gradient background",
+    "negativePrompt": "walking, walk cycle, stepping, running, jumping, dancing, moving location, forward movement, backward movement, large body movement, camera movement, camera cuts, zoom, rotation, scene change, background change, scenery, environment, room, city, duplicate person, extra person, face distortion, identity change, facial melting, face morphing, inconsistent face, changing facial features, head size change, body deformation, warped body, extra arms, extra legs, extra fingers, missing fingers, distorted hands, costume change, armor transformation, cape deformation, blurry face, flickering, unstable lighting, low quality",
     "duration": 5,
     "aspectRatio": "9:16",
     "outputResolution": "1080x1920",
