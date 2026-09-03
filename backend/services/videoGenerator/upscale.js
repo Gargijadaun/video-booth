@@ -35,7 +35,18 @@ async function normalizeToDeliveryFormat(inputVideoBuffer) {
         `fps=${TARGET_FPS}`,
         'format=yuv420p'
       ])
-      .outputOptions(['-c:v libx264', '-preset medium', '-crf 20', '-movflags +faststart', '-an'])
+      // veryfast/threads 1/no lookahead trades a little encode efficiency for a
+      // much smaller peak memory footprint - needed to fit low-memory hosts
+      // (e.g. a 512MB free-tier dyno) encoding a full 1080x1920 stream.
+      .outputOptions([
+        '-c:v libx264',
+        '-preset veryfast',
+        '-crf 22',
+        '-threads 1',
+        '-x264-params rc-lookahead=10:ref=1',
+        '-movflags +faststart',
+        '-an'
+      ])
       .output(tmpOut)
       .on('end', resolve)
       .on('error', reject)

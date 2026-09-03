@@ -1,5 +1,9 @@
 const sharp = require('sharp');
 
+// Sharp's default ~50MB decode cache is unnecessary overhead here (each
+// selfie is processed once) and worth shedding on memory-constrained hosts.
+sharp.cache(false);
+
 const MIN_DIMENSION = 400;
 const MAX_DIMENSION = 4096;
 
