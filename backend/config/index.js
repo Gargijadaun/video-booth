@@ -5,27 +5,35 @@ function num(val, fallback) {
   return Number.isFinite(n) ? n : fallback;
 }
 
+// Dashboard env var UIs (Render included) can leave a stray trailing newline
+// or whitespace when a value is pasted in - trim defensively so a URL never
+// ends up with a literal \n embedded in it (breaks src/href attributes).
+function str(val, fallback) {
+  const trimmed = (val || '').trim();
+  return trimmed || fallback;
+}
+
 module.exports = {
   port: num(process.env.PORT, 4000),
-  publicBaseUrl: process.env.PUBLIC_BASE_URL || 'http://localhost:4000',
+  publicBaseUrl: str(process.env.PUBLIC_BASE_URL, 'http://localhost:4000').replace(/\/$/, ''),
   // The deployed mobile controller app's URL (e.g. a Vercel deployment). Falls
   // back to the backend serving /booth/session itself for same-origin/local setups.
-  mobileAppUrl: (process.env.MOBILE_APP_URL || '').replace(/\/$/, ''),
-  corsOrigin: process.env.CORS_ORIGIN || '*',
+  mobileAppUrl: str(process.env.MOBILE_APP_URL, '').replace(/\/$/, ''),
+  corsOrigin: str(process.env.CORS_ORIGIN, '*'),
 
-  videoProvider: process.env.VIDEO_PROVIDER || 'mock',
+  videoProvider: str(process.env.VIDEO_PROVIDER, 'mock'),
 
   fal: {
-    apiKey: process.env.FAL_API_KEY || '',
-    model: process.env.FAL_MODEL || 'fal-ai/wan-i2v'
+    apiKey: str(process.env.FAL_API_KEY, ''),
+    model: str(process.env.FAL_MODEL, 'fal-ai/wan-i2v')
   },
   replicate: {
-    apiToken: process.env.REPLICATE_API_TOKEN || '',
-    model: process.env.REPLICATE_MODEL || 'wavespeedai/wan-2.1-i2v-480p'
+    apiToken: str(process.env.REPLICATE_API_TOKEN, ''),
+    model: str(process.env.REPLICATE_MODEL, 'wavespeedai/wan-2.1-i2v-480p')
   },
   huggingface: {
-    apiKey: process.env.HF_API_KEY || '',
-    model: process.env.HF_MODEL || 'Wan-AI/Wan2.1-I2V-14B-480P'
+    apiKey: str(process.env.HF_API_KEY, ''),
+    model: str(process.env.HF_MODEL, 'Wan-AI/Wan2.1-I2V-14B-480P')
   },
 
   selfieTtlMinutes: num(process.env.SELFIE_TTL_MINUTES, 30),
