@@ -5,6 +5,7 @@ import { apiUrl } from './config.js';
 import Welcome from './pages/Welcome.jsx';
 import Templates from './pages/Templates.jsx';
 import Camera from './pages/Camera.jsx';
+import FacePreview from './pages/FacePreview.jsx';
 import Generating from './pages/Generating.jsx';
 import Result from './pages/Result.jsx';
 import Share from './pages/Share.jsx';
@@ -141,7 +142,15 @@ export default function App() {
         <Camera
           sessionId={sessionId}
           onBack={() => setScreen('templates')}
-          onUploaded={() => {
+          onUploaded={() => setScreen('facePreview')}
+        />
+      )}
+
+      {screen === 'facePreview' && (
+        <FacePreview
+          sessionId={sessionId}
+          onRetake={() => setScreen('camera')}
+          onConfirm={() => {
             setProgress({ value: 5, message: 'Preparing your character...' });
             setScreen('generating');
             fetch(apiUrl(`/api/session/${sessionId}/generate`), { method: 'POST' }).catch(() => {
