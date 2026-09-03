@@ -75,10 +75,21 @@ async function runGenerationJob(sessionStore, sessionId, jobId, template) {
 
   const imageBuffer = fs.readFileSync(session.selfiePath);
 
+  // Pick a random action each generation so repeat guests on the same template
+  // don't all get the identical "walks toward camera" clip - only the action
+  // varies, the costume/character description in the prompt stays fixed.
+  const actionVariants = template.actionVariants || [];
+  const action = actionVariants.length
+    ? actionVariants[Math.floor(Math.random() * actionVariants.length)]
+    : '';
+  const filledPrompt = template.prompt.includes('{{ACTION}}')
+    ? template.prompt.replace('{{ACTION}}', action)
+    : template.prompt;
+
   const { providerJobId } = await provider.startJob({
     imageBuffer,
     imageMimeType: 'image/jpeg',
-    prompt: template.prompt,
+    prompt: filledPrompt,
     negativePrompt: template.negativePrompt,
     durationSeconds: template.duration,
     aspectRatio: template.aspectRatio
