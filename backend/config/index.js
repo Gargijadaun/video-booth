@@ -29,11 +29,15 @@ module.exports = {
   },
   replicate: {
     apiToken: str(process.env.REPLICATE_API_TOKEN, ''),
-    model: str(process.env.REPLICATE_MODEL, 'wavespeedai/wan-2.1-i2v-480p')
+    model: str(process.env.REPLICATE_MODEL, 'minimax/video-01')
   },
   huggingface: {
     apiKey: str(process.env.HF_API_KEY, ''),
     model: str(process.env.HF_MODEL, 'Wan-AI/Wan2.1-I2V-14B-480P')
+  },
+  elevenlabs: {
+    apiKey: str(process.env.ELEVENLABS_API_KEY, ''),
+    model: str(process.env.ELEVENLABS_MODEL, 'veo-3.1-generate-001')
   },
 
   selfieTtlMinutes: num(process.env.SELFIE_TTL_MINUTES, 30),

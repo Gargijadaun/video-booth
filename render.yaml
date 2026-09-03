@@ -17,7 +17,7 @@ services:
       - key: CORS_ORIGIN
         value: "*"
       - key: VIDEO_PROVIDER
-        value: fal
+        value: elevenlabs
       - key: FAL_API_KEY
         sync: false
       - key: FAL_MODEL
@@ -26,6 +26,10 @@ services:
         sync: false
       - key: REPLICATE_MODEL
         value: minimax/video-01
+      - key: ELEVENLABS_API_KEY
+        sync: false
+      - key: ELEVENLABS_MODEL
+        value: veo-3.1-generate-001
       - key: SELFIE_TTL_MINUTES
         value: 30
       - key: VIDEO_TTL_MINUTES

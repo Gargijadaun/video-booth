@@ -22,6 +22,8 @@ function getProvider() {
       return require('./providers/replicate');
     case 'huggingface':
       return require('./providers/huggingface');
+    case 'elevenlabs':
+      return require('./providers/elevenlabs');
     case 'mock':
     default:
       return require('./providers/mock');
