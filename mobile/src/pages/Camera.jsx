@@ -111,16 +111,35 @@ export default function Camera({ sessionId, onBack, onUploaded }) {
   function capture() {
     const video = videoRef.current;
     const canvas = canvasRef.current;
-    const size = Math.min(video.videoWidth, video.videoHeight);
-    canvas.width = 1080;
-    canvas.height = 1440;
+    const targetWidth = 1080;
+    const targetHeight = 1440;
+    const targetRatio = targetWidth / targetHeight;
+
+    // Crop a region matching the target's 3:4 aspect ratio (not a square) so
+    // drawImage scales it uniformly into the canvas instead of stretching it -
+    // a square source into a 3:4 destination was distorting the face
+    // vertically in every captured photo.
+    const videoRatio = video.videoWidth / video.videoHeight;
+    let sx, sy, sw, sh;
+    if (videoRatio > targetRatio) {
+      sh = video.videoHeight;
+      sw = sh * targetRatio;
+      sx = (video.videoWidth - sw) / 2;
+      sy = 0;
+    } else {
+      sw = video.videoWidth;
+      sh = sw / targetRatio;
+      sx = 0;
+      sy = (video.videoHeight - sh) / 2;
+    }
+
+    canvas.width = targetWidth;
+    canvas.height = targetHeight;
     const ctx = canvas.getContext('2d');
-    const sx = (video.videoWidth - size) / 2;
-    const sy = (video.videoHeight - size) / 2;
     // Mirror horizontally so the captured photo matches what the user saw (front camera).
     ctx.translate(canvas.width, 0);
     ctx.scale(-1, 1);
-    ctx.drawImage(video, sx, sy, size, size, 0, 0, canvas.width, canvas.height);
+    ctx.drawImage(video, sx, sy, sw, sh, 0, 0, targetWidth, targetHeight);
     setCapturedDataUrl(canvas.toDataURL('image/jpeg', 0.92));
     setPhase('captured');
   }
