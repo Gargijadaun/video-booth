@@ -66,6 +66,47 @@ module.exports = function createGenerationRouter(sessionStore) {
     res.json({ session: publicSession(session) });
   });
 
+  // Diagnostic/preview only: runs JUST the face-swap step (cheap, ~$0.02-0.19
+  // on OpenAI) and returns the resulting image directly - lets the identity-
+  // preservation quality be checked and iterated on without paying for a
+  // full video generation (which costs far more) on every attempt.
+  router.post('/session/:id/preview-faceswap', async (req, res) => {
+    const session = sessionStore.get(req.params.id);
+    if (!session) {
+      return res.status(404).json({ error: 'Session not found or expired.' });
+    }
+    if (!session.templateId) {
+      return res.status(400).json({ error: 'No template selected yet.' });
+    }
+    if (!session.selfiePath || !fs.existsSync(session.selfiePath)) {
+      return res.status(400).json({ error: 'No photo uploaded yet. Please take a photo first.' });
+    }
+    if (!config.openai.apiKey) {
+      return res.status(400).json({ error: 'OPENAI_API_KEY is not set - face swap is not configured.' });
+    }
+
+    const template = templates.find((t) => t.id === session.templateId && t.active);
+    if (!template || !template.thumbnail) {
+      return res.status(400).json({ error: 'Selected template is no longer available.' });
+    }
+
+    try {
+      const selfieBuffer = fs.readFileSync(session.selfiePath);
+      const templateImagePath = path.join(__dirname, '..', 'templates', 'assets', path.basename(template.thumbnail));
+      const templateImageBuffer = fs.readFileSync(templateImagePath);
+      const swapped = await swapFaceOntoTemplate({
+        selfieBuffer,
+        selfieMimeType: 'image/jpeg',
+        templateImageBuffer,
+        templateImageMimeType: 'image/jpeg'
+      });
+      const dataUrl = `data:${swapped.imageMimeType};base64,${swapped.imageBuffer.toString('base64')}`;
+      res.json({ previewImage: dataUrl });
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
   return router;
 };
 
