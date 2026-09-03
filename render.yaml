@@ -17,7 +17,7 @@ services:
       - key: CORS_ORIGIN
         value: "*"
       - key: VIDEO_PROVIDER
-        value: replicate
+        value: mock
       - key: FAL_API_KEY
         sync: false
       - key: FAL_MODEL
